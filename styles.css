@@ -1,0 +1,41 @@
+:root {
+  --stone: #e6e4df;
+  --ink: #1a1a1a;
+  --hair: #c8c4bc;
+  --copper: #9c4a32;
+  --serif: "Newsreader", "Iowan Old Style", Palatino, "Palatino Linotype", serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  color-scheme: light;
+  background: var(--stone);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--stone);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.4;
+  overflow-x: clip;
+}
+
+.mast {
+  max-width: 1400px;
+  padding: 3.2rem 7vw 0;
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(3.15rem, 8vw, 6.5rem);
+  letter-spacing: -0.04em;
+  line-height: 0.84;
+}
+
