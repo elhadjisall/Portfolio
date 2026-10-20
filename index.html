@@ -62,9 +62,21 @@
     </section>
 
     <figure class="studio">
-      <div class="studio-frame"></div>
+      <div class="studio-frame">
+        <canvas id="studio" width="640" height="800" aria-label="Four solid objects on a quiet ground, one per project"></canvas>
+        <div class="hits" id="hits"></div>
+      </div>
+      <figcaption>Click an object, or tab to it.</figcaption>
     </figure>
   </div>
 
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+    }
+  }
+  </script>
+  <script type="module" src="scene.js"></script>
 </body>
 </html>
