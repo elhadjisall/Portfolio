@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 const canvas = document.querySelector("#studio");
+const hits = document.querySelector("#hits");
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -129,6 +130,15 @@ for (const piece of pieces) {
   shade(piece.mesh);
   scene.add(piece.mesh);
 
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "hit";
+  button.dataset.id = piece.id;
+  button.setAttribute("aria-label", piece.label);
+  button.addEventListener("click", () => choose(piece.id));
+  button.addEventListener("focus", () => choose(piece.id));
+  hits.appendChild(button);
+  piece.button = button;
 }
 
 scene.add(new THREE.AmbientLight(0xfffaf6, 0.48));
@@ -151,6 +161,53 @@ const fill = new THREE.DirectionalLight(0xe6e2da, 0.5);
 fill.position.set(-4.2, 2.6, -1.5);
 scene.add(fill);
 
+let chosen = null;
+
+function choose(id) {
+  chosen = id;
+  document.querySelectorAll(".entry").forEach((entry) => {
+    entry.classList.toggle("is-lit", entry.id === id);
+  });
+  const entry = document.getElementById(id);
+  if (entry) {
+    entry.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+  }
+  for (const piece of pieces) piece.lift = piece.id === id ? 0.1 : 0;
+}
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+let hovered = null;
+
+function pieceFromHit(object) {
+  let node = object;
+  while (node && !node.userData.id) node = node.parent;
+  return node ? node.userData.id : null;
+}
+
+canvas.addEventListener("pointermove", (event) => {
+  const rect = canvas.getBoundingClientRect();
+  pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const found = raycaster.intersectObjects(pieces.map((piece) => piece.mesh), true);
+  hovered = found.length ? pieceFromHit(found[0].object) : null;
+  canvas.style.cursor = hovered ? "pointer" : "default";
+  for (const piece of pieces) {
+    piece.lift = piece.id === hovered || piece.id === chosen ? 0.1 : 0;
+  }
+});
+
+canvas.addEventListener("pointerleave", () => {
+  hovered = null;
+  canvas.style.cursor = "default";
+  for (const piece of pieces) piece.lift = piece.id === chosen ? 0.1 : 0;
+});
+
+canvas.addEventListener("click", () => {
+  if (hovered) choose(hovered);
+});
+
 function resize() {
   const width = canvas.clientWidth || 320;
   const height = canvas.clientHeight || 240;
@@ -158,6 +215,17 @@ function resize() {
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+}
+
+function placeButtons() {
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  for (const piece of pieces) {
+    const center = new THREE.Box3().setFromObject(piece.mesh).getCenter(new THREE.Vector3());
+    center.project(camera);
+    piece.button.style.left = `${(center.x * 0.5 + 0.5) * width}px`;
+    piece.button.style.top = `${(-center.y * 0.5 + 0.5) * height}px`;
+  }
 }
 
 window.addEventListener("resize", resize);
@@ -170,6 +238,7 @@ function frame() {
       : piece.mesh.position.y + (target - piece.mesh.position.y) * 0.16;
   }
   renderer.render(scene, camera);
+  placeButtons();
   requestAnimationFrame(frame);
 }
 
