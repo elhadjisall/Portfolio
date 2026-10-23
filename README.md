@@ -6,7 +6,7 @@ Personal site for four systems built from scratch.
 python3 -m http.server
 ```
 
-Or open index.html.
+Or open index.html. three.js is loaded from a CDN, with no build step.
 
 ## Projects
 
