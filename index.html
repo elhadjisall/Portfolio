@@ -6,7 +6,7 @@
   <title>elhadjisall</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,55 +18,38 @@
   <div class="sheet">
     <section class="work" aria-label="Projects">
       <ol>
-        <li id="quire" class="entry entry-quire">
-          <p class="idx">01</p>
+        <li id="quire">
           <h2>Quire</h2>
           <p class="blurb">A page-oriented SQL database.</p>
           <p class="stack">Go, B+tree, SQL, web console</p>
-          <p class="links">
-            <a href="https://github.com/elhadjisall/leaguetracker">leaguetracker</a>
-            <a href="https://github.com/elhadjisall/database-from-scratch">database-from-scratch</a>
-          </p>
+          <p class="links"><a href="https://github.com/elhadjisall/leaguetracker">leaguetracker</a></p>
         </li>
-        <li id="marconi" class="entry entry-marconi">
-          <p class="idx">02</p>
+        <li id="marconi">
           <h2>Marconi</h2>
           <p class="blurb">An in-memory data server.</p>
           <p class="stack">Go, RESP, AOF, web console</p>
-          <p class="links">
-            <a href="https://github.com/elhadjisall/quorum">quorum</a>
-            <a href="https://github.com/elhadjisall/redis-from-scratch">redis-from-scratch</a>
-          </p>
+          <p class="links"><a href="https://github.com/elhadjisall/quorum">quorum</a></p>
         </li>
-        <li id="wharf" class="entry entry-wharf">
-          <p class="idx">03</p>
+        <li id="wharf">
           <h2>Wharf</h2>
           <p class="blurb">A Linux container runtime.</p>
           <p class="stack">Python, namespaces, cgroups, web dashboard</p>
-          <p class="links">
-            <a href="https://github.com/elhadjisall/Portfolio">Portfolio</a>
-            <a href="https://github.com/elhadjisall/docker-from-scratch">docker-from-scratch</a>
-          </p>
+          <p class="links"><a href="https://github.com/elhadjisall/Portfolio">Portfolio</a></p>
         </li>
-        <li id="galley" class="entry entry-galley">
-          <p class="idx">04</p>
+        <li id="galley">
           <h2>Galley</h2>
           <p class="blurb">A transformer trained from scratch.</p>
           <p class="stack">Python, PyTorch, tokenizer, attention view</p>
-          <p class="links">
-            <a href="https://github.com/elhadjisall/dev-journal">dev-journal</a>
-            <a href="https://github.com/elhadjisall/llm-from-scratch">llm-from-scratch</a>
-          </p>
+          <p class="links"><a href="https://github.com/elhadjisall/dev-journal">dev-journal</a></p>
         </li>
       </ol>
     </section>
 
     <figure class="studio">
       <div class="studio-frame">
-        <canvas id="studio" width="640" height="800" aria-label="Four solid objects on a quiet ground, one per project"></canvas>
+        <canvas id="studio" width="640" height="800" aria-label="Four solid objects on a flat ground, one per project"></canvas>
         <div class="hits" id="hits"></div>
       </div>
-      <figcaption>Click an object, or tab to it.</figcaption>
     </figure>
   </div>
 
