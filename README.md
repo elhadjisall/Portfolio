@@ -1,4 +1,4 @@
-Personal site for four systems built from scratch.
+Personal site for Elhadji Sall.
 
 ## Open
 
@@ -6,11 +6,4 @@ Personal site for four systems built from scratch.
 python3 -m http.server
 ```
 
-Or open index.html. three.js is loaded from a CDN, with no build step.
-
-## Projects
-
-Quire. A page-oriented SQL database. https://github.com/elhadjisall/leaguetracker
-Marconi. An in-memory data server. https://github.com/elhadjisall/quorum
-Wharf. A Linux container runtime. https://github.com/elhadjisall/Portfolio
-Galley. A transformer trained from scratch. https://github.com/elhadjisall/dev-journal
+No build step. Scripts are ES modules, so open the site through a local server.

@@ -3,63 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>elhadjisall</title>
+  <meta name="description" content="Elhadji Sall. I build systems from scratch.">
+  <meta name="theme-color" content="#f5f5f7">
+  <title>Elhadji Sall</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans:wght@400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="mast">
-    <h1>elhadjisall</h1>
-    <p class="bio">I build systems from scratch.</p>
+    <h1>Elhadji Sall</h1>
+    <p class="lede">I build systems from scratch.</p>
+    <p class="contact">
+      <a href="https://github.com/elhadjisall">GitHub</a>
+      <a href="https://www.linkedin.com/in/elhadjisall">LinkedIn</a>
+      <a href="mailto:elhadjisall2005@gmail.com">elhadjisall2005@gmail.com</a>
+    </p>
   </header>
 
-  <div class="sheet">
-    <section class="work" aria-label="Projects">
-      <ol>
-        <li id="quire">
-          <h2>Quire</h2>
-          <p class="blurb">A page-oriented SQL database.</p>
-          <p class="stack">Go, B+tree, SQL, web console</p>
-          <p class="links"><a href="https://github.com/elhadjisall/leaguetracker">leaguetracker</a></p>
-        </li>
-        <li id="marconi">
-          <h2>Marconi</h2>
-          <p class="blurb">An in-memory data server.</p>
-          <p class="stack">Go, RESP, AOF, web console</p>
-          <p class="links"><a href="https://github.com/elhadjisall/quorum">quorum</a></p>
-        </li>
-        <li id="wharf">
-          <h2>Wharf</h2>
-          <p class="blurb">A Linux container runtime.</p>
-          <p class="stack">Python, namespaces, cgroups, web dashboard</p>
-          <p class="links"><a href="https://github.com/elhadjisall/Portfolio">Portfolio</a></p>
-        </li>
-        <li id="galley">
-          <h2>Galley</h2>
-          <p class="blurb">A transformer trained from scratch.</p>
-          <p class="stack">Python, PyTorch, tokenizer, attention view</p>
-          <p class="links"><a href="https://github.com/elhadjisall/dev-journal">dev-journal</a></p>
-        </li>
-      </ol>
-    </section>
+  <div class="layout">
+    <div class="column">
+      <section id="projects" class="block" aria-labelledby="projects-label">
+        <h2 id="projects-label">Projects</h2>
+      </section>
 
-    <figure class="studio">
-      <div class="studio-frame">
-        <canvas id="studio" width="640" height="800" aria-label="Four solid objects on a flat ground, one per project"></canvas>
-        <div class="hits" id="hits"></div>
-      </div>
-    </figure>
+      <section id="experience" class="block" aria-labelledby="experience-label">
+        <h2 id="experience-label">Experience</h2>
+      </section>
+    </div>
   </div>
-
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
-    }
-  }
-  </script>
-  <script type="module" src="scene.js"></script>
 </body>
 </html>
