@@ -140,6 +140,7 @@ h3 {
 }
 
 .note {
+  margin-top: 6px;
   color: var(--muted);
   font-family: var(--mono);
   font-size: 12px;

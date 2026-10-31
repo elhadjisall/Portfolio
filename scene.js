@@ -15,8 +15,8 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 40);
-camera.position.set(2.05, 1.72, 2.45);
-camera.lookAt(0.05, 0.78, 0);
+camera.position.set(0.08, 2.55, 3.15);
+camera.lookAt(0, 0.55, -0.05);
 
 function mat(color) {
   return new THREE.MeshStandardMaterial({
@@ -51,13 +51,13 @@ scene.add(floor);
 
 function desk() {
   const group = new THREE.Group();
-  const top = new THREE.Mesh(new THREE.BoxGeometry(3.35, 0.07, 1.64), paper());
+  const top = new THREE.Mesh(new THREE.BoxGeometry(1.92, 0.07, 2.15), paper());
   top.position.y = 0.76;
-  const leg = new THREE.BoxGeometry(0.06, 0.72, 1.42);
+  const leg = new THREE.BoxGeometry(0.06, 0.72, 1.9);
   const left = new THREE.Mesh(leg, shell());
-  left.position.set(-1.55, 0.36, 0);
+  left.position.set(-0.86, 0.36, 0);
   const right = new THREE.Mesh(leg, shell());
-  right.position.set(1.55, 0.36, 0);
+  right.position.set(0.86, 0.36, 0);
   group.add(top, left, right);
   return group;
 }
@@ -83,8 +83,9 @@ function laptop() {
   lid.rotation.x = -0.42;
 
   group.add(base, deck, track, lid);
-  group.position.set(-0.48, DESK_TOP, 0.02);
-  group.rotation.y = -0.08;
+  group.position.set(-0.08, DESK_TOP, -0.42);
+  group.rotation.y = 0.12;
+  group.scale.setScalar(0.82);
   return group;
 }
 
@@ -103,13 +104,15 @@ function book() {
 
 function ship() {
   const group = new THREE.Group();
-  const hull = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.32, 4), paper());
-  hull.rotation.x = Math.PI / 2;
-  hull.position.z = -0.02;
-  const wing = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.02, 0.09), shell());
-  wing.position.set(0, -0.02, 0.04);
-  group.add(hull, wing);
-  group.rotation.y = -0.5;
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.045, 0.26), paper());
+  body.position.y = 0.045;
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.12, 4), paper());
+  nose.rotation.x = Math.PI / 2;
+  nose.position.set(0, 0.045, -0.16);
+  const wing = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.018, 0.09), shell());
+  wing.position.set(0, 0.05, 0.02);
+  group.add(body, nose, wing);
+  group.rotation.y = 0.55;
   return group;
 }
 
@@ -179,12 +182,12 @@ function withMark(mesh) {
 }
 
 const specs = [
-  { id: "quire", label: "Quire", mesh: book(), x: 0.55, z: -0.18 },
-  { id: "invaders", label: "Space Invaders", mesh: ship(), x: 1.2, z: -0.22 },
-  { id: "galley", label: "Galley", mesh: plates(), x: 0.82, z: 0.38 },
-  { id: "transcribe", label: "TranscribeMate", mesh: mic(), x: 1.28, z: 0.32 },
-  { id: "bifocal", label: "Bifocal", mesh: lenses(), x: -1.42, z: 0.42 },
-  { id: "whodunit", label: "Whodunit", mesh: card(), x: 0.42, z: -0.52 },
+  { id: "quire", label: "Quire", mesh: book(), x: 0.42, z: 0.22 },
+  { id: "invaders", label: "Space Invaders", mesh: ship(), x: -0.42, z: 0.62 },
+  { id: "galley", label: "Galley", mesh: plates(), x: 0.42, z: 0.68 },
+  { id: "transcribe", label: "TranscribeMate", mesh: mic(), x: 0.48, z: -0.22 },
+  { id: "bifocal", label: "Bifocal", mesh: lenses(), x: -0.46, z: 0.12 },
+  { id: "whodunit", label: "Whodunit", mesh: card(), x: -0.02, z: 0.38 },
 ];
 
 const pieces = specs.map((spec) => {
