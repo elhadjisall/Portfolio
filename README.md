@@ -8,6 +8,10 @@ python3 -m http.server
 
 No build step. Scripts are ES modules, so open the site through a local server.
 
+## Umami
+
+Set `UMAMI_WEBSITE_ID` in `config.js`. The steps are in `UMAMI.md`. An empty id does not load the tracker.
+
 ## Projects
 
 - Quire — https://github.com/elhadjisall/GoDatabase
