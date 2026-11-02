@@ -20,5 +20,7 @@ Set `UMAMI_WEBSITE_ID` in `config.js`. The steps are in `UMAMI.md`. An empty id 
 - TranscribeMate — https://github.com/elhadjisall/TranscribeMate
 - Bifocal — https://github.com/elhadjisall/bifocal
 - Whodunit — https://github.com/elhadjisall/Whodunit
+- Marconi — https://github.com/elhadjisall/RedisFromScratch
+- Wharf — https://github.com/elhadjisall/Wharf
 
-GoDatabase, Galley, and TranscribeMate are private, so an anonymous visit returns 404 until they are public. `leaguetracker` points at the same commit as GoDatabase. Wharf and RedisFromScratch are empty repositories, so they are not listed.
+GoDatabase, Galley, TranscribeMate, RedisFromScratch, and Wharf are private, so an anonymous visit returns 404 until they are public. `leaguetracker` points at the same commit as GoDatabase.
