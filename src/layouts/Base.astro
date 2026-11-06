@@ -44,10 +44,22 @@ const jsonLd = JSON.stringify(personSchema).replace(/</g, '\\u003c');
 <!doctype html>
 <html lang="en">
   <head>
+    {
+      googleTagId && import.meta.env.PROD && (
+        <Fragment>
+          <script is:inline async src={`https://www.googletagmanager.com/gtm.js?id=${googleTagId}`}></script>
+          <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+          </script>
+        </Fragment>
+      )
+    }
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Loads the Google tag and Umami only on the live site, once IDs are set. -->
-    <script is:inline define:vars={{ googleTagId, umamiId, umamiSrc }}>
+    <!-- Loads Umami only on the live site, once its ID is set. -->
+    <script is:inline define:vars={{ umamiId, umamiSrc }}>
       (function () {
         var host = location.hostname;
         var isLocal =
@@ -58,22 +70,6 @@ const jsonLd = JSON.stringify(personSchema).replace(/</g, '\\u003c');
           host === '0.0.0.0' ||
           host.endsWith('.local');
         if (isLocal) return;
-
-        if (googleTagId) {
-          window.dataLayer = window.dataLayer || [];
-          window.gtag = function () {
-            window.dataLayer.push(arguments);
-          };
-          window.gtag('js', new Date());
-          // Waiting for load keeps this large script from slowing the page's first
-          // paint. Events sent before then stay queued in dataLayer.
-          window.addEventListener('load', function () {
-            var tag = document.createElement('script');
-            tag.async = true;
-            tag.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(googleTagId);
-            document.head.appendChild(tag);
-          });
-        }
 
         if (umamiId) {
           var umami = document.createElement('script');
