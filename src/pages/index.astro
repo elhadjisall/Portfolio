@@ -1,0 +1,138 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../components/Icon.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Tags from '../components/Tags.astro';
+import { contact, experience, notes, person, projects, skills } from '../data/content';
+import Base from '../layouts/Base.astro';
+import { inline, umamiEvent } from '../lib/format';
+
+const socials = [
+  { platform: 'github', label: 'GitHub', href: person.github, icon: 'github' },
+  { platform: 'linkedin', label: 'LinkedIn', href: person.linkedin, icon: 'linkedin' },
+  { platform: 'email', label: 'Email', href: `mailto:${person.email}`, icon: 'mail' },
+] as const;
+---
+
+<Base title={`${person.name} | Software Engineer`} description={`${person.intro} Looking for Summer 2027 software engineering internships.`}>
+  <section id="top" class="hero" data-section="hero">
+    {
+      person.photo ? (
+        <Picture
+          class="avatar"
+          src={person.photo}
+          alt={person.name}
+          formats={['avif', 'webp']}
+          width={160}
+          height={160}
+          loading="eager"
+        />
+      ) : (
+        <span class="avatar avatar-monogram" aria-hidden="true">{person.initials}</span>
+      )
+    }
+    <h1>{person.name}</h1>
+    <p class="hero-intro">{person.intro}</p>
+    <p class="hero-bio">{person.bio}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href={person.resume} target="_blank" rel="noopener" {...umamiEvent('resume_download')}>
+        <Icon name="file" /> Resume
+      </a>
+      {
+        socials.map(({ platform, label, href, icon }) => (
+          <a class="button" href={href} {...umamiEvent('social_click', { platform })}>
+            <Icon name={icon} /> {label}
+          </a>
+        ))
+      }
+    </div>
+    <p class="currently"><span class="currently-dot" aria-hidden="true"></span><span><strong>Currently:</strong> {person.currently}</span></p>
+  </section>
+
+  <section id="experience" class="section" data-section="experience" aria-labelledby="experience-title">
+    <h2 id="experience-title">Experience</h2>
+    <ol class="jobs">
+      {
+        experience.map((job) => (
+          <li class="job reveal">
+            <span class="job-logo">
+              <img src={job.logo} alt="" width="24" height="24" loading="lazy" decoding="async" />
+            </span>
+            <div class="job-body">
+              <h3>{job.role}</h3>
+              <p class="job-company">
+                <a href={job.url} {...umamiEvent('experience_click', { company: job.company })}>
+                  {job.company} <Icon name="arrow" />
+                </a>
+                {job.team && <span> · {job.team}</span>}
+              </p>
+              <p class="job-meta">{job.dates} · {job.location}</p>
+              <p class="job-summary">{job.summary}</p>
+              <ul class="job-bullets">
+                {job.bullets.map((bullet) => <li set:html={inline(bullet)} />)}
+              </ul>
+              <Tags items={job.tech} />
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section id="projects" class="section" data-section="projects" aria-labelledby="projects-title">
+    <h2 id="projects-title">Projects</h2>
+    <div class="cards">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+
+  <section id="skills" class="section" data-section="skills" aria-labelledby="skills-title">
+    <h2 id="skills-title">Skills</h2>
+    <dl class="skills reveal">
+      {
+        skills.map(({ group, items }) => (
+          <div>
+            <dt>{group}</dt>
+            <dd><Tags items={items} /></dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section id="notes" class="section" data-section="notes" aria-labelledby="notes-title">
+    <h2 id="notes-title">Notes</h2>
+    <ul class="notes reveal">
+      {
+        notes.map(({ title, summary, date, href }) => (
+          <li>
+            <div>
+              <h3>{href ? <a href={href}>{title}</a> : title}</h3>
+              <p>{summary}</p>
+            </div>
+            <span class="note-date">{date ?? 'Coming soon'}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section id="contact" class="section" data-section="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Let's talk</h2>
+    <p class="contact-line">{contact.line}</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href={`mailto:${person.email}`} {...umamiEvent('social_click', { platform: 'email' })}>
+        <Icon name="mail" /> {person.email}
+      </a>
+      {
+        socials
+          .filter(({ platform }) => platform !== 'email')
+          .map(({ platform, label, href, icon }) => (
+            <a class="button" href={href} {...umamiEvent('social_click', { platform })}>
+              <Icon name={icon} /> {label}
+            </a>
+          ))
+      }
+    </div>
+  </section>
+</Base>

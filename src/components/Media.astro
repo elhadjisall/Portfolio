@@ -1,0 +1,42 @@
+---
+import { Picture } from 'astro:assets';
+import type { Media } from '../data/content';
+
+interface Props {
+  media: Media;
+  /** Card thumbnail: fixed ratio, shorter terminal. */
+  preview?: boolean;
+  sizes?: string;
+  eager?: boolean;
+}
+
+const { media, preview = false, sizes = '(min-width: 800px) 720px, 100vw', eager = false } = Astro.props;
+const lines =
+  media.kind === 'terminal' ? media.lines.slice(0, preview ? media.previewLines : undefined) : [];
+const lineClass = (line: string) =>
+  /^[$>] /.test(line) ? 'term-input' : line.startsWith('# ') ? 'term-comment' : '';
+---
+
+<div class:list={['media', { 'media-preview': preview, 'media-contain': media.kind === 'image' && media.contain }]}>
+  {
+    media.kind === 'image' ? (
+      <Picture
+        src={media.src}
+        alt={preview ? '' : media.alt}
+        formats={['avif', 'webp']}
+        fallbackFormat="jpg"
+        widths={[480, 960, 1440]}
+        sizes={sizes}
+        quality={70}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+    ) : (
+      <div class="terminal" aria-hidden={preview ? 'true' : undefined}>
+        <p class="terminal-title">{media.title}</p>
+        <pre tabindex={preview ? undefined : 0} aria-label={preview ? undefined : `Terminal session: ${media.title}`}><code>{lines.map((line, index) => <span class:list={['term-line', lineClass(line)]} style={`--i:${index}`}>{line}{'\n'}</span>)}</code></pre>
+      </div>
+    )
+  }
+</div>

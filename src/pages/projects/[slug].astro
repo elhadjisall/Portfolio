@@ -1,0 +1,110 @@
+---
+import Icon from '../../components/Icon.astro';
+import Media from '../../components/Media.astro';
+import Tags from '../../components/Tags.astro';
+import { person, projects, type Project } from '../../data/content';
+import Base from '../../layouts/Base.astro';
+import { inline, umamiEvent } from '../../lib/format';
+
+export function getStaticPaths() {
+  return projects.map((project, index) => ({
+    params: { slug: project.slug },
+    props: { project, next: projects[(index + 1) % projects.length] },
+  }));
+}
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+
+const { project, next } = Astro.props;
+const { caseStudy: study, media } = project;
+const link = (link_type: string) => umamiEvent('project_click', { project: project.slug, link_type });
+---
+
+<Base title={`${project.title} | ${person.name}`} description={project.tagline}>
+  <article class="study">
+    <a class="back-link" href="/#projects"><Icon name="left" /> All projects</a>
+    <header class="study-header">
+      <p class="eyebrow">{project.context}</p>
+      <h1>{project.title}</h1>
+      <p class="study-tagline">{project.tagline}</p>
+      <Tags items={project.tech} />
+      <div class="hero-actions">
+        {
+          project.live && (
+            <a class="button button-primary" href={project.live} {...link('live')}>
+              Live <Icon name="arrow" />
+            </a>
+          )
+        }
+        <a class:list={['button', { 'button-primary': !project.live }]} href={project.code} {...link('code')}>
+          <Icon name="github" /> Code
+        </a>
+      </div>
+    </header>
+
+    <figure class:list={['study-figure', { reveal: media.kind === 'terminal' }]}>
+      <Media media={media} eager={media.kind === 'image'} />
+      {media.caption && <figcaption>{media.caption}</figcaption>}
+    </figure>
+
+    <section class="study-section reveal">
+      <h2>Problem</h2>
+      {study.problem.map((paragraph) => <p set:html={inline(paragraph)} />)}
+    </section>
+
+    <section class="study-section reveal">
+      <h2>What I built</h2>
+      {study.built.map((paragraph) => <p set:html={inline(paragraph)} />)}
+    </section>
+
+    <section class="study-section reveal">
+      <h2>How</h2>
+      <ol class="flow" aria-label="Architecture, from top to bottom">
+        {
+          study.architecture.map((row) => (
+            <li class="flow-row" style={`--boxes:${row.length}`}>
+              {row.map(({ title, detail }) => (
+                <div class="flow-box">
+                  <strong>{title}</strong>
+                  {detail && <span>{detail}</span>}
+                </div>
+              ))}
+            </li>
+          ))
+        }
+      </ol>
+      {study.how.map((paragraph) => <p set:html={inline(paragraph)} />)}
+    </section>
+
+    {
+      project.gallery?.map((item) => (
+        <figure class="study-figure reveal">
+          <Media media={item} />
+          {item.caption && <figcaption>{item.caption}</figcaption>}
+        </figure>
+      ))
+    }
+
+    <section class="study-section reveal">
+      <h2>Results</h2>
+      <ul class="study-list">
+        {study.results.map((item) => <li set:html={inline(item)} />)}
+      </ul>
+    </section>
+
+    <section class="study-section reveal">
+      <h2>What I learned</h2>
+      <ul class="study-list">
+        {study.learned.map((item) => <li set:html={inline(item)} />)}
+      </ul>
+    </section>
+
+    <a class="next-project" href={`/projects/${next.slug}/`}>
+      <span class="eyebrow">Next project</span>
+      <span class="next-title">{next.title} <Icon name="right" /></span>
+    </a>
+  </article>
+</Base>

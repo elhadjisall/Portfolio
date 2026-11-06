@@ -1,0 +1,16 @@
+---
+import Icon from '../components/Icon.astro';
+import Base from '../layouts/Base.astro';
+import { person } from '../data/content';
+---
+
+<Base title={`Page not found | ${person.name}`} description="This page doesn't exist." noindex>
+  <section class="not-found">
+    <p class="eyebrow">404</p>
+    <h1>Nothing at this path.</h1>
+    <p>Even a bisect couldn't find this page. It may have moved, or the link may be wrong.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="/"><Icon name="left" /> Back home</a>
+    </div>
+  </section>
+</Base>
