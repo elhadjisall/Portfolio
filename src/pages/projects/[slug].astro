@@ -25,11 +25,12 @@ const link = (link_type: string) => umamiEvent('project_click', { project: proje
 
 <Base title={`${project.title} | ${person.name}`} description={project.tagline}>
   <article class="study">
-    <a class="back-link" href="/#projects"><Icon name="left" /> All projects</a>
+    <a class="back-link" href="/projects/"><Icon name="left" /> All projects</a>
     <header class="study-header">
       <p class="eyebrow">{project.context}</p>
       <h1>{project.title}</h1>
       <p class="study-tagline">{project.tagline}</p>
+      {project.credit && <p class="study-credit">{project.credit}</p>}
       <Tags items={project.tech} />
       <div class="hero-actions">
         {
@@ -42,6 +43,13 @@ const link = (link_type: string) => umamiEvent('project_click', { project: proje
         <a class:list={['button', { 'button-primary': !project.live }]} href={project.code} {...link('code')}>
           <Icon name="github" /> Code
         </a>
+        {
+          project.links?.map(({ label, href, type }) => (
+            <a class="button" href={href} target="_blank" rel="noopener" {...link(type)}>
+              {label} (PDF)
+            </a>
+          ))
+        }
       </div>
     </header>
 
@@ -59,6 +67,15 @@ const link = (link_type: string) => umamiEvent('project_click', { project: proje
       <h2>What I built</h2>
       {study.built.map((paragraph) => <p set:html={inline(paragraph)} />)}
     </section>
+
+    {
+      study.myPart && study.myPart.length > 0 && (
+        <section class="study-section reveal">
+          <h2>My part</h2>
+          {study.myPart.map((paragraph) => <p set:html={inline(paragraph)} />)}
+        </section>
+      )
+    }
 
     <section class="study-section reveal">
       <h2>How</h2>
@@ -95,12 +112,16 @@ const link = (link_type: string) => umamiEvent('project_click', { project: proje
       </ul>
     </section>
 
-    <section class="study-section reveal">
-      <h2>What I learned</h2>
-      <ul class="study-list">
-        {study.learned.map((item) => <li set:html={inline(item)} />)}
-      </ul>
-    </section>
+    {
+      study.learned.length > 0 && (
+        <section class="study-section reveal">
+          <h2>What I learned</h2>
+          <ul class="study-list">
+            {study.learned.map((item) => <li set:html={inline(item)} />)}
+          </ul>
+        </section>
+      )
+    }
 
     <a class="next-project" href={`/projects/${next.slug}/`}>
       <span class="eyebrow">Next project</span>

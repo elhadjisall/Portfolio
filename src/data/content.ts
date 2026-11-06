@@ -5,8 +5,7 @@
  * Search for "TODO" to find everything that still needs your input. TODOs are
  * comments only, so nothing unfinished shows on the page:
  *   - `live: null` hides the Live link.
- *   - `photo: null` shows the ES monogram.
- *   - A post with `href: null` shows "Coming soon".
+ *   - `photo: null` leaves the photo out of the hero.
  */
 import type { ImageMetadata } from 'astro';
 
@@ -21,7 +20,9 @@ import transcribeMate from '../assets/projects/transcribemate.png';
 export type Media =
   | { kind: 'image'; src: ImageMetadata; alt: string; caption?: string; contain?: boolean }
   /** A replayed terminal session. Lines starting with "$ " or "> " are input. */
-  | { kind: 'terminal'; title: string; lines: string[]; previewLines?: number; caption?: string };
+  | { kind: 'terminal'; title: string; lines: string[]; previewLines?: number; caption?: string }
+  /** A chart or plot served from public/, shown whole on a white background. */
+  | { kind: 'figure'; src: string; alt: string; width: number; height: number; caption?: string };
 
 export interface ArchitectureBox {
   title: string;
@@ -31,18 +32,25 @@ export interface ArchitectureBox {
 export interface Project {
   slug: string;
   title: string;
-  featured?: boolean;
   /** One line for the card. */
   tagline: string;
   context: string;
   tech: string[];
   code: string;
   live: string | null;
+  /** One concrete result, shown on the card. */
+  proof?: string;
+  /** Extra links, such as a report or slides. `type` is the analytics link_type. */
+  links?: Array<{ label: string; href: string; type: string }>;
+  /** Teammates, shown under the project's context. */
+  credit?: string;
   media: Media;
   gallery?: Media[];
   caseStudy: {
     problem: string[];
     built: string[];
+    /** What you personally built on a team project. */
+    myPart?: string[];
     /** Rows run top to bottom. Several boxes in a row happen side by side. */
     architecture: ArchitectureBox[][];
     how: string[];
@@ -57,9 +65,13 @@ export const person = {
   name: 'Elhadji Sall',
   initials: 'ES',
   intro: 'CS student at UNBC building backend, systems and AI software.',
-  bio: "I'm a Computer Science student (Minor in Mathematics) at the University of Northern British Columbia, graduating May 2028. I love making software fast and reliable, from C++ client code and Python backend services to container runtimes, storage engines and Gemini-powered agents. I'm looking for Summer 2027 software engineering internships on backend, infrastructure and AI/ML teams.",
-  currently:
-    "Software Engineer Intern at Microsoft (Activision), working on Call of Duty's login and authentication services.",
+  /** The home page types these one after another. The first also shows without JavaScript. */
+  roles: [
+    'CS student at UNBC',
+    'Software Engineer Intern at Microsoft',
+    'Building backend, systems and AI software',
+  ],
+  bio: "I'm studying Computer Science at the University of Northern British Columbia, with a minor in Mathematics, graduating May 2028. I love building, tinkering and learning new things.",
   // TODO: add a photo. Save it to src/assets/, import it at the top of this
   // file, and use it here, e.g. `photo: myPhoto`. Square, at least 320px.
   photo: null as ImageMetadata | null,
@@ -70,10 +82,6 @@ export const person = {
   jobTitle: 'Software Engineer Intern',
   employer: 'Microsoft',
   school: 'University of Northern British Columbia',
-};
-
-export const contact = {
-  line: "I'm looking for Summer 2027 internships. If you're working on backend, infrastructure or AI/ML, I'd love to hear from you.",
 };
 
 /* Experience ------------------------------------------------------------- */
@@ -129,7 +137,6 @@ export const projects: Project[] = [
   {
     slug: 'whodunit',
     title: 'Whodunit',
-    featured: true,
     tagline:
       'Git bisect with a brain. A Gemini agent turns a plain-English bug report into a reproduction test and finds the culprit commit, even when the test is flaky.',
     context: 'Solo, Hack the North 2026',
@@ -189,6 +196,80 @@ export const projects: Project[] = [
         'A demo has to survive the venue, so quota fallback and an offline simulation mattered as much as the model did.',
         'Treating a test as evidence rather than truth makes the search both faster and more honest about what it knows.',
       ],
+    },
+  },
+  {
+    slug: 'dsm',
+    title: 'DSM Optimizer',
+    tagline: "Reorders a project's task-dependency matrix to cut rework loops, in C++17.",
+    context: 'Team project · CPSC 482, UNBC',
+    tech: ['C++17', 'graphs', 'sparse matrices'],
+    code: 'https://github.com/elhadjisall/DSM',
+    live: null,
+    links: [
+      { label: 'Report', href: '/dsm/report.pdf', type: 'report' },
+      { label: 'Slides', href: '/dsm/slides.pdf', type: 'slides' },
+    ],
+    credit: 'With Simon Kraft and Joshua Payne.',
+    proof: 'Feedback marks **6,063 → 192** on a 9,664-task matrix; **84%** average reduction across 10 benchmarks.',
+    media: {
+      kind: 'figure',
+      src: '/images/dsm/California.png',
+      width: 1603,
+      height: 775,
+      alt: 'Two matrix plots of the California benchmark. Before: dots scattered across the whole matrix, with 6,063 feedback marks. After: nearly all dots below the diagonal, with 192 feedback marks.',
+      caption: 'The California benchmark before and after: 6,063 feedback marks down to 192.',
+    },
+    gallery: [
+      {
+        kind: 'figure',
+        src: '/images/dsm/optimization_stage_average.png',
+        width: 1500,
+        height: 900,
+        alt: 'Bar chart of average reduction by stage across 10 matrices. Topological sort alone reaches about 76% for FBM and 95% for TFBD. Tearing raises FBM to about 84%. Banding changes little.',
+        caption: 'Average reduction after each stage, across all 10 matrices.',
+      },
+      {
+        kind: 'figure',
+        src: '/images/dsm/scaling.png',
+        width: 1500,
+        height: 900,
+        alt: 'Log-log plot of mean runtime against vertices plus edges for each pipeline stage, with an O(V+E) reference line.',
+        caption: 'Runtime of each stage against V + E, on log-log axes, with an O(V+E) reference line.',
+      },
+    ],
+    caseStudy: {
+      problem: [
+        'A Design Structure Matrix lists the tasks in a project, with a mark wherever one task depends on another. Marks above the diagonal are feedback marks: a task that depends on work scheduled after it, which means rework.',
+        'Reordering the tasks can remove many of those marks. We measured two things: the number of feedback marks (FBM), and their total distance from the diagonal (TFBD).',
+      ],
+      built: [
+        'A six-stage pipeline in C++17 that reads a sparse matrix and returns a reordered one. We tested it on 10 benchmark matrices, from 11×11 up to 27,770×27,770.',
+      ],
+      // TODO(elhadji): list exactly what you built and what Simon and Joshua built.
+      myPart: [],
+      architecture: [
+        [{ title: 'Parse', detail: 'Matrix Market into compressed sparse columns' }],
+        [{ title: 'SCC decomposition', detail: "Tarjan's and Kosaraju-Sharir's algorithms" }],
+        [{ title: 'Condense and sort', detail: "Contract each SCC, then Kahn's topological sort" }],
+        [{ title: 'Tearing', detail: 'Eades-Lin-Smyth Algorithm GR inside each SCC' }],
+        [{ title: 'Banding', detail: 'Reverse Cuthill-McKee, then adjacent-swap hill climbing' }],
+        [{ title: 'Permute', detail: 'Apply P^T A P and verify the result' }],
+      ],
+      how: [
+        'Tasks in a strongly connected component depend on each other, so no ordering can clear every feedback mark among them. Contracting each component gives a DAG, and a topological sort of that DAG leaves feedback marks only inside the components.',
+        'Tearing then approximates a minimum feedback arc set inside each component. The hill climbing step accepts a swap only if TFBD drops and FBM does not rise.',
+      ],
+      results: [
+        '**84%** average FBM reduction and **94.54%** average TFBD reduction across the 10 matrices.',
+        'On California (9,664 tasks), FBM fell from **6,063** to **192** and TFBD from **18,810,564** to **669**.',
+        'Tarjan ran about **1.8×** faster than Kosaraju.',
+        'Most of the gain came from SCC condensation plus topological sort; tearing added about 8 points of FBM reduction, and banding barely moved either metric.',
+      ],
+      // TODO(elhadji): explain why topological sort did most of the work. Be ready
+      // to answer this in an interview. It may also be worth saying that average
+      // TFBD reduction was 95.21% after the sort and 94.54% at the end.
+      learned: [],
     },
   },
   {
@@ -492,36 +573,44 @@ export const skills = [
   { group: 'Hardware', items: ['QTrobot', 'ROS'] },
 ];
 
-/* Notes ------------------------------------------------------------------ */
-
-/** TODO: when a post is ready, set its `date` and point `href` at the URL. */
-export const notes: Array<{ title: string; summary: string; date: string | null; href: string | null }> = [
-  {
-    title: "How Whodunit's Bayesian bisect handles flaky tests",
-    summary: 'Treating a test result as evidence, not truth, and what that does to the search.',
-    date: null,
-    href: null,
-  },
-  {
-    title: 'Building a container runtime in Python',
-    summary: 'From unshare to pivot_root: what a container is once you take it apart.',
-    date: null,
-    href: null,
-  },
-  {
-    title: 'What I learned writing a Redis clone',
-    summary: 'Parsing RESP, expiring keys and replaying an append-only file in Go.',
-    date: null,
-    href: null,
-  },
-];
-
 /* Navigation ------------------------------------------------------------- */
 
 export const navigation = [
+  { id: 'about', label: 'About' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'notes', label: 'Notes' },
+  { id: 'outside', label: 'Outside' },
   { id: 'contact', label: 'Contact' },
 ];
+
+/* Outside of code --------------------------------------------------------- */
+
+export const outside = {
+  text: 'Outside of coding, I really enjoy gaming, hiking and bouldering. My most recent hike, Panorama Ridge, was my longest and most fun yet: 8 hours, 27 km and 1,621 m of elevation gain.',
+  photos: [
+    {
+      src: '/images/hike-panorama-ridge.jpg',
+      alt: 'Sitting on a rocky ledge at Panorama Ridge, looking out over a bright blue lake and snow-capped mountains.',
+      width: 1600,
+      height: 1200,
+    },
+    {
+      src: '/images/hike-black-tusk.jpg',
+      alt: 'Standing on a snowy ridge with the dark peak of Black Tusk in the distance.',
+      width: 1200,
+      height: 1500,
+    },
+    {
+      src: '/images/hike-meadow.jpg',
+      alt: 'Walking a wooden boardwalk through a green alpine meadow under a blue sky.',
+      width: 1200,
+      height: 1500,
+    },
+    {
+      src: '/images/hike-lake.jpg',
+      alt: 'Standing on a grassy slope above a turquoise alpine lake.',
+      width: 1200,
+      height: 1500,
+    },
+  ],
+};

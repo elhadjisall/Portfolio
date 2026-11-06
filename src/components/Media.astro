@@ -17,9 +17,27 @@ const lineClass = (line: string) =>
   /^[$>] /.test(line) ? 'term-input' : line.startsWith('# ') ? 'term-comment' : '';
 ---
 
-<div class:list={['media', { 'media-preview': preview, 'media-contain': media.kind === 'image' && media.contain }]}>
+<div
+  class:list={[
+    'media',
+    {
+      'media-preview': preview,
+      'media-contain': media.kind === 'image' && media.contain,
+      'media-figure': media.kind === 'figure',
+    },
+  ]}
+>
   {
-    media.kind === 'image' ? (
+    media.kind === 'figure' ? (
+      <img
+        src={media.src}
+        alt={preview ? '' : media.alt}
+        width={media.width}
+        height={media.height}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : media.kind === 'image' ? (
       <Picture
         src={media.src}
         alt={preview ? '' : media.alt}

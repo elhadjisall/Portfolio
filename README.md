@@ -18,7 +18,7 @@ Analytics never load on localhost. In `npm run dev`, every event is logged to th
 
 ## Edit content
 
-Almost everything is in one file: [`src/data/content.ts`](src/data/content.ts). That covers the bio, experience, projects, case studies, skills and notes. No layout code needs to change.
+Almost everything is in one file: [`src/data/content.ts`](src/data/content.ts). That covers the bio, experience, projects, case studies and skills. No layout code needs to change.
 
 - `**text**` renders as bold and `` `text` `` as inline code.
 - Search for `TODO` to find what still needs input. TODOs are comments, so unfinished items are hidden from the page rather than shown as placeholders.
@@ -27,7 +27,6 @@ Almost everything is in one file: [`src/data/content.ts`](src/data/content.ts). 
 | --- | --- |
 | Add your photo | Save it in `src/assets/`, import it in `content.ts`, and set `person.photo` |
 | Add a Live link | Set the project's `live` to a URL |
-| Publish a note | Set its `date` and `href` |
 | Update the resume | Replace `public/resume.pdf` |
 | Replace the social card | Replace `public/og.png` (1200 × 630) |
 | Add a project image | Save it in `src/assets/projects/`, import it in `content.ts`, and use it as `media` |
@@ -94,7 +93,7 @@ All events go through `track()` in [`src/scripts/analytics.ts`](src/scripts/anal
 | --- | --- | --- |
 | `resume_download` | none | Resume button is clicked |
 | `social_click` | `platform`: github, linkedin or email | A GitHub, LinkedIn or email button is clicked |
-| `project_click` | `project`, `link_type`: live, code or case_study | A project link is clicked |
+| `project_click` | `project`, `link_type`: live, code, case_study, report or slides | A project link is clicked |
 | `experience_click` | `company` | An employer link is clicked |
 | `nav_click` | `section` | A navigation link is clicked |
 | `theme_toggle` | `theme` | The theme is switched |
@@ -136,7 +135,7 @@ For job applications, replace `company-name` with the company, for example `utm_
 ```text
 src/data/content.ts     All site content
 src/data/config.ts      Site URL and analytics IDs
-src/pages/              Home, case studies, 404, robots.txt, sitemap.xml
+src/pages/              One page per section, case studies, 404, robots.txt, sitemap.xml
 src/layouts/Base.astro  Shared head, SEO tags and analytics loader
 src/components/         Page components
 src/scripts/            Analytics, theme, scroll reveal, active navigation

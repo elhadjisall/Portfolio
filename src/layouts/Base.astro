@@ -1,10 +1,7 @@
 ---
 import '@fontsource-variable/inter/wght.css';
-import '@fontsource-variable/newsreader/opsz.css';
 import '../styles/global.css';
 import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
-import newsreaderFont from '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url';
-import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
 import { analytics, analyticsPlaceholders, SITE_URL } from '../data/config';
 import { person } from '../data/content';
@@ -102,10 +99,8 @@ const jsonLd = JSON.stringify(personSchema).replace(/</g, '\\u003c');
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0b0b0d" />
     <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={newsreaderFont} as="font" type="font/woff2" crossorigin />
 
     <script is:inline type="application/ld+json" set:html={jsonLd} />
 
@@ -122,14 +117,13 @@ const jsonLd = JSON.stringify(personSchema).replace(/</g, '\\u003c');
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+    <Nav />
     <div class="shell">
-      <Nav />
       <div class="column">
         <main id="main">
           <slot />
         </main>
-        <Footer />
-      </div>
+        </div>
     </div>
     <script>
       import '../scripts/site';

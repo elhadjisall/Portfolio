@@ -1,0 +1,19 @@
+---
+import { person } from '../data/content';
+import { umamiEvent } from '../lib/format';
+import Icon from './Icon.astro';
+
+const socials = [
+  { platform: 'github', label: 'GitHub', href: person.github, icon: 'github' },
+  { platform: 'linkedin', label: 'LinkedIn', href: person.linkedin, icon: 'linkedin' },
+  { platform: 'email', label: 'Email', href: `mailto:${person.email}`, icon: 'mail' },
+] as const;
+---
+
+{
+  socials.map(({ platform, label, href, icon }) => (
+    <a class="icon-button" href={href} aria-label={label} title={label} {...umamiEvent('social_click', { platform })}>
+      <Icon name={icon} />
+    </a>
+  ))
+}

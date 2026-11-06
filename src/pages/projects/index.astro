@@ -1,0 +1,14 @@
+---
+import ProjectCard from '../../components/ProjectCard.astro';
+import { person, projects } from '../../data/content';
+import Base from '../../layouts/Base.astro';
+---
+
+<Base title={`Projects | ${person.name}`} description="Systems, backend and AI projects, each with a write-up and source code.">
+  <section class="section" data-section="projects">
+    <h1>Projects</h1>
+    <div class="cards">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </section>
+</Base>
