@@ -1,8 +1,8 @@
 ---
-import '@fontsource-variable/inter/wght.css';
 import '../styles/global.css';
-import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
+import Sidebar from '../components/Sidebar.astro';
 import { analytics, analyticsPlaceholders, SITE_URL } from '../data/config';
 import { person } from '../data/content';
 
@@ -11,9 +11,13 @@ interface Props {
   description: string;
   image?: string;
   noindex?: boolean;
+  /** Which sky sits behind the page. */
+  scene?: 'constellations' | 'orbit' | 'still';
+  /** Show the Website Mayhem toggle, on the page that has that section. */
+  mayhem?: boolean;
 }
 
-const { title, description, image = '/og.png', noindex = false } = Astro.props;
+const { title, description, image = '/og.png', noindex = false, scene = 'still', mayhem = false } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE_URL).href;
 const imageUrl = new URL(image, SITE_URL).href;
@@ -99,32 +103,32 @@ const jsonLd = JSON.stringify(personSchema).replace(/</g, '\\u003c');
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#0b0b0d" />
-    <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#07090d" />
+    <link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin />
 
     <script is:inline type="application/ld+json" set:html={jsonLd} />
 
-    <!-- Runs before paint: applies the saved theme and enables reveal styles. -->
     <script is:inline>
       document.documentElement.classList.add('js');
       try {
-        var savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light' || savedTheme === 'dark') {
-          document.documentElement.dataset.theme = savedTheme;
+        if (localStorage.getItem('theme') === '8-bit') {
+          document.documentElement.classList.add('eight-bit');
         }
       } catch (e) {}
     </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Nav />
-    <div class="shell">
-      <div class="column">
-        <main id="main">
-          <slot />
-        </main>
-        </div>
+    <canvas id="sky" data-scene={scene} aria-hidden="true"></canvas>
+    <Sidebar showKeyHint={mayhem} />
+    <div class="page" data-page>
+      <Nav />
+      <main id="main">
+        <slot />
+      </main>
+      <Footer showMayhem={mayhem} />
     </div>
+    <slot name="overlay" />
     <script>
       import '../scripts/site';
     </script>

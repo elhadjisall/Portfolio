@@ -1,0 +1,32 @@
+---
+import { status } from '../data/content';
+
+interface Props {
+  showKeyHint?: boolean;
+}
+
+const { showKeyHint = false } = Astro.props;
+---
+
+<aside class="sidebar" data-sidebar aria-label="Status">
+  <dl>
+    <dt class="mono">Session</dt>
+    <dd data-session>00:00:00</dd>
+  </dl>
+  <dl>
+    <dt class="mono">{status.city ? `Local time · ${status.city}` : 'Local time'}</dt>
+    <dd data-clock={status.timeZone}>--:--:--</dd>
+  </dl>
+  <dl>
+    <dt class="mono">Now reading</dt>
+    <dd>{status.reading}</dd>
+  </dl>
+  <dl>
+    <dt class="mono">Last summit</dt>
+    <dd>{status.summit}</dd>
+  </dl>
+  <div class="sidebar-hint mono">
+    {showKeyHint && <p>Press D for destruction mode</p>}
+    <p>Press B for 8-bit</p>
+  </div>
+</aside>

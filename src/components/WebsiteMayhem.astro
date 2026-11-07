@@ -1,0 +1,50 @@
+---
+import { mayhem } from '../data/content';
+import { umamiEvent } from '../lib/format';
+
+// A little pixel block wall, with a few blocks knocked loose.
+const wall = [
+  '##.###.##.',
+  '###.##.###',
+  '.####.###.',
+  '##.##...#.',
+  '#.##..#...',
+];
+const blocks = wall.flatMap((row, y) =>
+  [...row].flatMap((cell, x) => (cell === '#' ? [{ x: x * 6, y: y * 6, loose: y > 2 }] : [])),
+);
+---
+
+<section class="mayhem" id="mayhem" data-section="mayhem" aria-labelledby="mayhem-title">
+  <div class="mayhem-panel">
+    <svg class="mayhem-art" viewBox="0 0 60 30" width="150" height="75" shape-rendering="crispEdges" aria-hidden="true">
+      {blocks.map(({ x, y, loose }) => <rect class:list={{ loose }} x={x} y={y} width="5" height="5"></rect>)}
+    </svg>
+    <h2 id="mayhem-title">DESTROY THIS WEBSITE.</h2>
+    <p class="mayhem-subtitle">You've seen enough of my portfolio. Now try breaking it.</p>
+
+    <div class="mayhem-wave" aria-hidden="true">
+      {Array.from({ length: 22 }, (_, index) => <span style={`--bar:${index}`}></span>)}
+    </div>
+
+    <div class="mayhem-action">
+      <a
+        class="mayhem-button"
+        href={mayhem.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Enter destruction mode (opens the game on Sprite Fusion in a new tab)"
+        {...umamiEvent('mayhem_click')}>ENTER DESTRUCTION MODE →</a
+      >
+      <div class="mayhem-keys" aria-hidden="true">
+        <span></span><kbd>W</kbd><span></span>
+        <kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>
+      </div>
+    </div>
+
+    <p class="mayhem-credit">
+      Destroy Any Website is a free game by <a href={mayhem.creditUrl}>Sprite Fusion</a>, made by Hugo Duprez. I didn't
+      build it.
+    </p>
+  </div>
+</section>

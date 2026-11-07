@@ -1,7 +1,5 @@
 ---
-import Icon from '../../components/Icon.astro';
 import Media from '../../components/Media.astro';
-import Tags from '../../components/Tags.astro';
 import { person, projects, type Project } from '../../data/content';
 import Base from '../../layouts/Base.astro';
 import { inline, umamiEvent } from '../../lib/format';
@@ -23,62 +21,54 @@ const { caseStudy: study, media } = project;
 const link = (link_type: string) => umamiEvent('project_click', { project: project.slug, link_type });
 ---
 
-<Base title={`${project.title} | ${person.name}`} description={project.tagline}>
+<Base title={`${project.title} | ${person.name}`} description={project.blurb}>
   <article class="study">
-    <a class="back-link" href="/projects/"><Icon name="left" /> All projects</a>
+    <a class="back-link" href="/projects/">← ALL PROJECTS</a>
     <header class="study-header">
-      <p class="eyebrow">{project.context}</p>
+      <p class="mono muted">{project.category}</p>
       <h1>{project.title}</h1>
       <p class="study-tagline">{project.tagline}</p>
       {project.credit && <p class="study-credit">{project.credit}</p>}
-      <Tags items={project.tech} />
-      <div class="hero-actions">
-        {
-          project.live && (
-            <a class="button button-primary" href={project.live} {...link('live')}>
-              Live <Icon name="arrow" />
-            </a>
-          )
-        }
-        <a class:list={['button', { 'button-primary': !project.live }]} href={project.code} {...link('code')}>
-          <Icon name="github" /> Code
-        </a>
+      <p class="study-tech">{project.tech.join(', ')}</p>
+      <p class="row-links">
+        <a href={project.code} {...link('code')}>Code</a>
+        {project.live && <a href={project.live} {...link('live')}>Live</a>}
         {
           project.links?.map(({ label, href, type }) => (
-            <a class="button" href={href} target="_blank" rel="noopener" {...link(type)}>
+            <a href={href} target="_blank" rel="noopener" {...link(type)}>
               {label} (PDF)
             </a>
           ))
         }
-      </div>
+      </p>
     </header>
 
-    <figure class:list={['study-figure', { reveal: media.kind === 'terminal' }]}>
-      <Media media={media} eager={media.kind === 'image'} />
+    <figure class="study-figure">
+      <Media media={media} eager={media.kind !== 'terminal'} />
       {media.caption && <figcaption>{media.caption}</figcaption>}
     </figure>
 
-    <section class="study-section reveal">
-      <h2>Problem</h2>
+    <section class="study-section">
+      <h2 class="marker">Problem</h2>
       {study.problem.map((paragraph) => <p set:html={inline(paragraph)} />)}
     </section>
 
-    <section class="study-section reveal">
-      <h2>What I built</h2>
+    <section class="study-section">
+      <h2 class="marker">What I built</h2>
       {study.built.map((paragraph) => <p set:html={inline(paragraph)} />)}
     </section>
 
     {
       study.myPart && study.myPart.length > 0 && (
-        <section class="study-section reveal">
-          <h2>My part</h2>
+        <section class="study-section">
+          <h2 class="marker">My part</h2>
           {study.myPart.map((paragraph) => <p set:html={inline(paragraph)} />)}
         </section>
       )
     }
 
-    <section class="study-section reveal">
-      <h2>How</h2>
+    <section class="study-section">
+      <h2 class="marker">How</h2>
       <ol class="flow" aria-label="Architecture, from top to bottom">
         {
           study.architecture.map((row) => (
@@ -98,15 +88,15 @@ const link = (link_type: string) => umamiEvent('project_click', { project: proje
 
     {
       project.gallery?.map((item) => (
-        <figure class="study-figure reveal">
+        <figure class="study-figure">
           <Media media={item} />
           {item.caption && <figcaption>{item.caption}</figcaption>}
         </figure>
       ))
     }
 
-    <section class="study-section reveal">
-      <h2>Results</h2>
+    <section class="study-section">
+      <h2 class="marker">Results</h2>
       <ul class="study-list">
         {study.results.map((item) => <li set:html={inline(item)} />)}
       </ul>
@@ -114,8 +104,8 @@ const link = (link_type: string) => umamiEvent('project_click', { project: proje
 
     {
       study.learned.length > 0 && (
-        <section class="study-section reveal">
-          <h2>What I learned</h2>
+        <section class="study-section">
+          <h2 class="marker">What I learned</h2>
           <ul class="study-list">
             {study.learned.map((item) => <li set:html={inline(item)} />)}
           </ul>
@@ -123,9 +113,6 @@ const link = (link_type: string) => umamiEvent('project_click', { project: proje
       )
     }
 
-    <a class="next-project" href={`/projects/${next.slug}/`}>
-      <span class="eyebrow">Next project</span>
-      <span class="next-title">{next.title} <Icon name="right" /></span>
-    </a>
+    <a class="next-project" href={`/projects/${next.slug}/`}>NEXT: {next.title} →</a>
   </article>
 </Base>

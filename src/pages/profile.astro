@@ -1,0 +1,47 @@
+---
+import { Picture } from 'astro:assets';
+import ElevationProfile from '../components/ElevationProfile.astro';
+import { beyond, person } from '../data/content';
+import Base from '../layouts/Base.astro';
+---
+
+<Base title={`Profile | ${person.name}`} description={beyond.text} scene="constellations">
+  <section class="block" data-section="profile">
+    <h1 class="marker">Beyond the code</h1>
+    <p class="ascent-label mono">Last ascent</p>
+    <div class="ascent">
+      {
+        beyond.photos.map(({ src, alt }, index) => (
+          <Picture
+            src={src}
+            alt={alt}
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            widths={index === 0 ? [480, 800, 1360] : [300, 600]}
+            sizes={index === 0 ? '(min-width: 760px) 680px, 100vw' : '(min-width: 640px) 220px, 100vw'}
+            quality={72}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            fetchpriority={index === 0 ? 'high' : 'auto'}
+            decoding="async"
+          />
+        ))
+      }
+    </div>
+    <p class="ascent-stats mono">{beyond.stats}</p>
+    <ElevationProfile />
+    <p class="ascent-text">{beyond.text}</p>
+
+    <p class="shelf-label mono">Currently reading</p>
+    <ul class="shelf">
+      {
+        beyond.books.map(({ title, author, color, note }) => (
+          <li class="spine" style={`--spine:${color}`}>
+            <span class="spine-title">{title}</span>
+            <span class="spine-author">{author}</span>
+            {note && <span class="spine-note">{note}</span>}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>

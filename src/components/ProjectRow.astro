@@ -1,0 +1,54 @@
+---
+import type { Project } from '../data/content';
+import { umamiEvent } from '../lib/format';
+
+interface Props {
+  project: Project;
+  building?: boolean;
+  /** Show the expandable detail, as on /projects. */
+  expandable?: boolean;
+}
+
+const { project, building = false, expandable = false } = Astro.props;
+const link = (link_type: string) => umamiEvent('project_click', { project: project.slug, link_type });
+---
+
+<article class="row">
+  <p class="row-label mono">{project.category}</p>
+  <h3 class="row-title sub">
+    <a href={project.code} aria-label={`${project.title} code on GitHub`} {...link('code')}>
+      {project.title}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M7 17 17 7M8 7h9v9"></path>
+      </svg>
+    </a>
+  </h3>
+  <p class="row-text">{project.blurb}</p>
+  {
+    project.metric && (
+      <div class="row-metric">
+        <p class="metric-value">{project.metric.value}</p>
+        <p class="metric-label mono">{project.metric.label}</p>
+      </div>
+    )
+  }
+  {building && <p class="row-status mono">{project.next ? `In progress · Next: ${project.next}` : 'In progress'}</p>}
+  {
+    expandable && (
+      <details class="row-details">
+        <summary>Details</summary>
+        <p>{project.details}</p>
+      </details>
+    )
+  }
+  <p class="row-links">
+    <a href={`/projects/${project.slug}/`} {...link('case_study')}>Read case study →</a>
+    {
+      project.links?.map(({ label, href, type }) => (
+        <a href={href} target="_blank" rel="noopener" {...link(type)}>
+          {label} (PDF)
+        </a>
+      ))
+    }
+  </p>
+</article>

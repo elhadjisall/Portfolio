@@ -21,11 +21,11 @@ Analytics never load on localhost. In `npm run dev`, every event is logged to th
 Almost everything is in one file: [`src/data/content.ts`](src/data/content.ts). That covers the bio, experience, projects, case studies and skills. No layout code needs to change.
 
 - `**text**` renders as bold and `` `text` `` as inline code.
-- Search for `TODO` to find what still needs input. TODOs are comments, so unfinished items are hidden from the page rather than shown as placeholders.
+- Search for `TODO(elhadji)` to find what still needs input. TODOs are comments, so unfinished items are hidden from the page rather than shown as placeholders.
 
 | To do this | Change this |
 | --- | --- |
-| Add your photo | Save it in `src/assets/`, import it in `content.ts`, and set `person.photo` |
+| Add a hike profile | Save a GPX file at `public/data/panorama.gpx`; the elevation line appears by itself |
 | Add a Live link | Set the project's `live` to a URL |
 | Update the resume | Replace `public/resume.pdf` |
 | Replace the social card | Replace `public/og.png` (1200 × 630) |
@@ -96,7 +96,8 @@ All events go through `track()` in [`src/scripts/analytics.ts`](src/scripts/anal
 | `project_click` | `project`, `link_type`: live, code, case_study, report or slides | A project link is clicked |
 | `experience_click` | `company` | An employer link is clicked |
 | `nav_click` | `section` | A navigation link is clicked |
-| `theme_toggle` | `theme` | The theme is switched |
+| `mayhem_click` | none | The Website Mayhem button is clicked |
+| `theme_toggle` | `theme`: 8-bit or default | The 8-bit theme is switched |
 | `outbound_link` | `url` | Any link to another site is clicked (automatic) |
 | `section_view` | `section` | A section first scrolls into view on a page load |
 
@@ -135,10 +136,10 @@ For job applications, replace `company-name` with the company, for example `utm_
 ```text
 src/data/content.ts     All site content
 src/data/config.ts      Site URL and analytics IDs
-src/pages/              One page per section, case studies, 404, robots.txt, sitemap.xml
+src/pages/              Home, projects, case studies, 404, robots.txt, sitemap.xml
 src/layouts/Base.astro  Shared head, SEO tags and analytics loader
 src/components/         Page components
-src/scripts/            Analytics, theme, scroll reveal, active navigation
+src/scripts/            Analytics, the animated skies (sky/), scroll fade, sidebar clock
 src/styles/global.css   All styles and design tokens
 public/                 Files served as they are
 ```

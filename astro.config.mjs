@@ -7,4 +7,11 @@ export default defineConfig({
   site: SITE_URL,
   output: 'static',
   build: { format: 'directory' },
+  // These pages moved onto the home page, so old links still land in the right place.
+  redirects: {
+    '/about': '/#about',
+    '/experience': '/#experience',
+    '/outside': '/profile/',
+    '/contact': '/#contact',
+  },
 });

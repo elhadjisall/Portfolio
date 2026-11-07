@@ -2,10 +2,9 @@
  * All of the site's words live in this file. Edit it and push; no layout code
  * needs to change. `**text**` in a bullet or paragraph renders as bold.
  *
- * Search for "TODO" to find everything that still needs your input. TODOs are
- * comments only, so nothing unfinished shows on the page:
- *   - `live: null` hides the Live link.
- *   - `photo: null` leaves the photo out of the hero.
+ * Search for "TODO(elhadji)" to find what still needs your input. Those fields
+ * are empty on purpose, and the page leaves out anything empty, so nothing
+ * unfinished ever shows on the site.
  */
 import type { ImageMetadata } from 'astro';
 
@@ -14,6 +13,10 @@ import whodunitDesk from '../assets/projects/whodunit-idle-desk.png';
 import whodunitNewspaper from '../assets/projects/whodunit-newspaper.png';
 import galleyAttention from '../assets/projects/galley-attention.png';
 import transcribeMate from '../assets/projects/transcribemate.png';
+import hikePanorama from '../assets/photos/hike-panorama-ridge.jpg';
+import hikeBlackTusk from '../assets/photos/hike-black-tusk.jpg';
+import hikeMeadow from '../assets/photos/hike-meadow.jpg';
+import hikeLake from '../assets/photos/hike-lake.jpg';
 
 /* Types ------------------------------------------------------------------ */
 
@@ -38,8 +41,16 @@ export interface Project {
   tech: string[];
   code: string;
   live: string | null;
-  /** One concrete result, shown on the card. */
-  proof?: string;
+  /** Small mono label above the name. */
+  category: string;
+  /** One line for the home and projects rows. */
+  blurb: string;
+  /** Two or three lines for the expandable detail on /projects. */
+  details: string;
+  /** Leave out when there is no real number to show. */
+  metric?: { value: string; label: string };
+  /** Only for projects still being built. */
+  next?: string | null;
   /** Extra links, such as a report or slides. `type` is the analytics link_type. */
   links?: Array<{ label: string; href: string; type: string }>;
   /** Teammates, shown under the project's context. */
@@ -63,25 +74,32 @@ export interface Project {
 
 export const person = {
   name: 'Elhadji Sall',
-  initials: 'ES',
-  intro: 'CS student at UNBC building backend, systems and AI software.',
-  /** The home page types these one after another. The first also shows without JavaScript. */
-  roles: [
-    'CS student at UNBC',
-    'Software Engineer Intern at Microsoft',
-    'Building backend, systems and AI software',
+  /** The line under your name types these in turn. The first also shows without JavaScript. */
+  roles: ['Backend engineer', 'Hiking enthusiast', 'Reader', 'Love to build things'],
+  description:
+    "Computer Science student at UNBC. I work mostly on backend and systems code in C++, Python and Go.",
+  about: [
+    "I'm a Computer Science student at UNBC, with a minor in Math. I work mostly on backend and systems code in C++, Python and Go. At Microsoft, I work on Call of Duty's login and authentication services, from the C++ game client to the Python services behind it, running on Kubernetes and Docker. Before that, I built a real-time pose-tracking pipeline for a robot at the UNBC Robotics Lab.",
+    'I like knowing how things work underneath, so I build my own versions of them: a Linux container runtime, a Redis clone in Go, and a C++ tool that reorders large dependency graphs. I care a lot about what happens when things break, so I write retries and fallbacks, plus tests that take a service down on purpose to make sure they work.',
   ],
-  bio: "I'm studying Computer Science at the University of Northern British Columbia, with a minor in Mathematics, graduating May 2028. I love building, tinkering and learning new things.",
-  // TODO: add a photo. Save it to src/assets/, import it at the top of this
-  // file, and use it here, e.g. `photo: myPhoto`. Square, at least 320px.
-  photo: null as ImageMetadata | null,
   email: 'elhadjisall2005@gmail.com',
   github: 'https://github.com/elhadjisall',
+  githubName: 'elhadjisall',
   linkedin: 'https://linkedin.com/in/elhadjisall',
+  linkedinName: 'elhadjisall',
   resume: '/resume.pdf',
   jobTitle: 'Software Engineer Intern',
   employer: 'Microsoft',
   school: 'University of Northern British Columbia',
+};
+
+/** The small panel on the left of the screen on desktop. */
+export const status = {
+  // TODO(elhadji): your city. The label stays plain "Local time" until this is set.
+  city: null as string | null,
+  timeZone: 'America/Vancouver',
+  reading: 'Red Rising',
+  summit: 'Panorama Ridge · 27 km',
 };
 
 /* Experience ------------------------------------------------------------- */
@@ -89,6 +107,7 @@ export const person = {
 export const experience = [
   {
     company: 'Microsoft',
+    metric: { value: '15%', label: 'FASTER LOGIN HANDSHAKE · 90M+ PLAYERS' },
     team: 'Activision / Demonware',
     role: 'Software Engineer Intern',
     dates: 'May 2026 – Dec 2026',
@@ -97,7 +116,7 @@ export const experience = [
     url: 'https://www.microsoft.com',
     logo: '/logos/microsoft.svg',
     bullets: [
-      'Optimized the C++ game-client login state machine and retry/exponential backoff, cutting authentication handshake latency **15%** and failed-reconnection time **20%** for **90M+** players across PC, Xbox and PlayStation',
+      'Reworked the C++ game-client login state machine and retry/exponential backoff, cutting authentication handshake latency **15%** and failed-reconnection time **20%** for **90M+** players across PC, Xbox and PlayStation',
       'Shipped Python REST features in the login and banning services: MFA fixes, per-title endpoint routing that isolates dedicated game servers from DDoS traffic ahead of a **30M+** player beta, TPM-based hardware-ban enforcement, and audit telemetry',
       'Built a fault-tolerant fallback so clients never receive stale endpoints during upstream outages; rolled out services with Kubernetes, Docker and Helm across **five** environments',
     ],
@@ -105,13 +124,14 @@ export const experience = [
   },
   {
     company: 'UNBC Robotics Lab',
+    metric: { value: '<100ms', label: 'LIVE POSE TRACKING · 30 FPS' },
     team: '',
     role: 'Software Engineer Intern',
     dates: 'June 2025 – Feb 2026',
     location: 'Prince George, BC',
     summary: 'Real-time coaching for an autonomous QTrobot.',
     url: 'https://www.unbc.ca',
-    // TODO: this is a neutral monogram. Replace public/logos/unbc.svg if you
+    // TODO(elhadji): this is a neutral monogram. Replace public/logos/unbc.svg if you
     // have an approved UNBC or lab logo.
     logo: '/logos/unbc.svg',
     bullets: [
@@ -136,13 +156,17 @@ export const experience = [
 export const projects: Project[] = [
   {
     slug: 'whodunit',
+    category: 'AI TOOLING · HACK THE NORTH 2026',
+    blurb: 'Turns a plain-English bug report into a test, then finds the bad commit with a Bayesian bisect that handles flaky tests.',
+    details: 'Hybrid BM25 and Gemini embedding search over commits, diffs, CI logs and issues sets a prior over every commit. Each probe runs in its own git worktree and updates the posterior with a flake rate.',
+    metric: { value: '6.74 → 4.17 bits', label: 'UNCERTAINTY CUT BEFORE ANY TEST RAN' },
     title: 'Whodunit',
     tagline:
       'Git bisect with a brain. A Gemini agent turns a plain-English bug report into a reproduction test and finds the culprit commit, even when the test is flaky.',
     context: 'Solo, Hack the North 2026',
     tech: ['TypeScript', 'Gemini', 'Elasticsearch', 'Node.js', 'React'],
     code: 'https://github.com/elhadjisall/whodunit',
-    live: null, // TODO: add a demo video or hosted simulation URL.
+    live: null, // TODO(elhadji): add a demo video or hosted simulation URL.
     media: {
       kind: 'image',
       src: whodunitBisect,
@@ -200,6 +224,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'dsm',
+    category: 'ALGORITHMS · TEAM, CPSC 482',
+    blurb: "Reorders a project's task-dependency matrix to cut rework loops, in C++17.",
+    details: 'A six-stage pipeline: SCC detection, topological sort, tearing, banding and verification. Tested on 10 matrices up to 27,770×27,770, with an 84% average drop in feedback marks.',
+    metric: { value: '6,063 → 192', label: 'FEEDBACK MARKS · 9,664-TASK MATRIX' },
     title: 'DSM Optimizer',
     tagline: "Reorders a project's task-dependency matrix to cut rework loops, in C++17.",
     context: 'Team project · CPSC 482, UNBC',
@@ -211,7 +239,6 @@ export const projects: Project[] = [
       { label: 'Slides', href: '/dsm/slides.pdf', type: 'slides' },
     ],
     credit: 'With Simon Kraft and Joshua Payne.',
-    proof: 'Feedback marks **6,063 → 192** on a 9,664-task matrix; **84%** average reduction across 10 benchmarks.',
     media: {
       kind: 'figure',
       src: '/images/dsm/California.png',
@@ -274,6 +301,10 @@ export const projects: Project[] = [
   },
   {
     slug: 'wharf',
+    category: 'SYSTEMS',
+    blurb: 'A Linux container runtime in Python, with namespaces, an overlay root filesystem and a Docker-style CLI.',
+    details: 'Runs without root when unprivileged user namespaces are on. Calls pivot_root directly, enters running containers with setns, and sets cgroup v2 memory, CPU and pids limits.',
+    metric: { value: '6 namespaces', label: 'ROOTLESS · CGROUP V2 LIMITS' },
     title: 'Wharf',
     tagline:
       'A Linux container runtime in Python with namespaces, an overlay root filesystem, cgroup v2 limits and a Docker-style CLI.',
@@ -339,12 +370,16 @@ export const projects: Project[] = [
   },
   {
     slug: 'marconi',
+    category: 'SYSTEMS',
+    blurb: 'An in-memory data server in Go that speaks the Redis protocol.',
+    details: 'Strings, hashes, lists and sets, with TTL expiry on a heap. An append-only file replays on restart, and a PSYNC handshake syncs a read-only replica.',
+    metric: { value: 'AOF + PSYNC', label: 'REDIS PROTOCOL · 4 DATA TYPES' },
     title: 'Marconi',
     tagline:
       'Redis from scratch: an in-memory data server in Go with RESP, TTL expiry, an append-only file and PSYNC replication.',
     context: 'Personal project',
     tech: ['Go', 'TCP', 'RESP'],
-    code: 'https://github.com/elhadjisall/RedisFromScratch',
+    code: 'https://github.com/elhadjisall/Marconi',
     live: null,
     media: {
       kind: 'terminal',
@@ -404,6 +439,12 @@ export const projects: Project[] = [
   },
   {
     slug: 'galley',
+    category: 'ML SYSTEMS',
+    blurb: 'A small GPT-style model built from scratch in PyTorch.',
+    details: 'A byte-level BPE tokenizer, causal attention, a training loop with a cosine schedule, and LoRA and instruction fine-tuning code. A browser workbench shows tokens, attention and loss.',
+    // TODO(elhadji): a real metric, as metric: { value: '...', label: '...' }.
+    // TODO(elhadji): what comes next, for example training on a real corpus.
+    next: null,
     title: 'Galley',
     tagline:
       'A small GPT-style transformer built from scratch in PyTorch, with a workbench for inspecting tokens, attention and loss.',
@@ -457,13 +498,16 @@ export const projects: Project[] = [
   },
   {
     slug: 'transcribemate',
+    category: 'ML SYSTEMS',
+    blurb: 'Speech-to-text in the browser, backed by a local Whisper service that streams partial text.',
+    details: 'The browser sends PCM to a local PyTorch service. Audio is split into 30-second windows with 5 seconds of overlap, and text comes back as each window finishes.',
     title: 'TranscribeMate',
     tagline:
       'Speech-to-text in the browser, backed by a local PyTorch Whisper service that streams partial transcripts as it works.',
     context: 'Personal project',
     tech: ['Python', 'PyTorch', 'Whisper', 'React'],
     code: 'https://github.com/elhadjisall/TranscribeMate',
-    live: null, // TODO: add a hosted demo URL if you deploy one.
+    live: null, // TODO(elhadji): add a hosted demo URL if you deploy one.
     media: {
       kind: 'image',
       src: transcribeMate,
@@ -500,13 +544,16 @@ export const projects: Project[] = [
   },
   {
     slug: 'bifocal',
+    category: 'ML · TEAM, HACKAI',
+    blurb: 'Flags abusive and manipulative messages with a multi-task classifier, then suggests next steps.',
+    details: 'A MiniLM encoder feeds four task heads, with 74% held-out accuracy across 9 incident types. Hybrid RAG with Gemini writes the guidance, served through Flask to a React app.',
     title: 'Bifocal',
     tagline:
       'Flags abusive and manipulative messages with a multi-task classifier, and offers guidance through hybrid RAG with Gemini.',
     context: 'Team project, HackAI',
     tech: ['Python', 'PyTorch', 'FAISS', 'Gemini', 'Flask', 'React', 'TypeScript'],
     code: 'https://github.com/elhadjisall/bifocal',
-    live: null, // TODO: add a hosted demo URL if you deploy one.
+    live: null, // TODO(elhadji): add a hosted demo URL if you deploy one.
     media: {
       kind: 'terminal',
       title: 'artifacts/metrics.json',
@@ -556,61 +603,169 @@ export const projects: Project[] = [
       ],
     },
   },
-];
-
-/* Skills ----------------------------------------------------------------- */
-
-export const skills = [
-  { group: 'Languages', items: ['C++', 'Python', 'Go', 'C', 'Java', 'TypeScript', 'JavaScript', 'SQL'] },
   {
-    group: 'Frameworks',
-    items: ['React', 'Node.js', 'Django', 'Flask', 'FastAPI', 'PyTorch', 'TensorFlow', 'OpenCV', 'MediaPipe'],
+    slug: 'quire',
+    title: 'Quire',
+    category: 'DATABASES',
+    blurb: 'A SQL database in Go, built on a B+tree of 4 KB copy-on-write pages.',
+    details:
+      'Tables, secondary indexes, transactions and EXPLAIN. For each query the planner picks a primary-key lookup, an index scan or a full table scan.',
+    // TODO(elhadji): a real metric, as metric: { value: '...', label: '...' }.
+    // TODO(elhadji): what comes next, for example JOIN or GROUP BY.
+    next: null,
+    tagline: 'A page-oriented SQL database in Go, from the pager up to the query planner.',
+    context: 'Personal project',
+    tech: ['Go', 'B+trees', 'SQL'],
+    code: 'https://github.com/elhadjisall/Quire',
+    live: null,
+    media: {
+      kind: 'terminal',
+      title: 'kvdb exec',
+      lines: [
+        "> CREATE TABLE books (id INT64, title STRING, author STRING, PRIMARY KEY (id));",
+        'table books created (0.24 ms)',
+        '> CREATE INDEX by_author ON books (author);',
+        'index on books (author) created (0.05 ms)',
+        "> INSERT INTO books VALUES (1, 'Red Rising', 'Pierce Brown'), (2, 'Frankenstein', 'Mary Shelley'), (3, 'Golden Son', 'Pierce Brown');",
+        '3 row(s) written (0.02 ms)',
+        "> SELECT title FROM books WHERE author = 'Pierce Brown';",
+        '| Red Rising |',
+        '| Golden Son |',
+        '2 row(s) via index scan on (author) (0.01 ms)',
+      ],
+      caption: 'A real run on a fresh build. The planner picked the author index without being told to.',
+    },
+    caseStudy: {
+      problem: [
+        'A database has to keep data safe if the process dies mid-write, and it has to find rows without reading the whole file. Quire does both with a B+tree stored on fixed-size pages.',
+      ],
+      built: [
+        'Quire stores `INT64` and `STRING` rows, a primary key and secondary indexes in one file of 4096-byte pages. It accepts `CREATE TABLE`, `CREATE INDEX`, `INSERT`, `UPSERT`, `SELECT` with `WHERE`, `LIKE`, `ORDER BY`, `LIMIT` and aggregates, plus `UPDATE`, `DELETE`, `EXPLAIN` and `BEGIN` / `COMMIT` / `ROLLBACK`.',
+        'It runs as a shell, a one-shot `exec` command, or an HTTP server with a web console that shows tables, indexes and the page map.',
+      ],
+      architecture: [
+        [{ title: 'SQL text', detail: 'Shell, exec or HTTP' }],
+        [{ title: 'Lexer and parser', detail: 'Statements into a syntax tree' }],
+        [
+          { title: 'Planner', detail: 'Primary-key lookup, index scan or table scan' },
+          { title: 'Executor', detail: 'Filters, sorts and aggregates' },
+        ],
+        [{ title: 'Tables and indexes', detail: 'Order-preserving keys' }],
+        [{ title: 'B+tree', detail: 'Splits on insert, merges on delete' }],
+        [{ title: 'Pager', detail: 'Copy-on-write 4 KB pages, freelist, fsync on commit' }],
+      ],
+      how: [
+        'Keys are encoded so that byte order matches value order: a 4-byte prefix, sign-flipped big-endian `INT64`, and escaped strings. That lets one B+tree serve range scans for every table and index.',
+        'Writes never overwrite live pages. A commit appends new pages, calls fsync, then rewrites page 0, the master page that points at the current root. Readers see the last committed snapshot.',
+        "`LIKE 'prefix%'` becomes index bounds. When `ORDER BY` doesn't match the scan order, the executor sorts in memory.",
+      ],
+      results: [
+        'The repo has **30** Go tests across the B+tree, pager, SQL and HTTP layers.',
+        'Each shell entry or `exec` script commits as one transaction, and a failed statement rolls the batch back.',
+        'Not done yet: no `JOIN`, subqueries, `GROUP BY` or `OR`, no `NULL`, and one writer at a time.',
+      ],
+      // TODO(elhadji): 1 or 2 real stories about a bug you hit.
+      learned: [],
+    },
   },
   {
-    group: 'Tools',
-    items: ['Kubernetes', 'Docker', 'Helm', 'Linux', 'Git', 'Jenkins', 'Elasticsearch', 'PostgreSQL', 'Redis', 'Grafana', 'Kibana', 'AWS'],
+    slug: 'spaceinvaders',
+    title: 'Space Invaders',
+    category: 'GRAPHICS · C++',
+    blurb: 'My first C++ project: Space Invaders on a small engine with OpenGL 3.3 rendering, packed component arrays and a spatial hash.',
+    details:
+      'A sprite batcher draws 640 moving sprites in 2 draw calls, against 658 with batching turned off. Collisions go through a spatial hash, checked against brute force in a headless test.',
+    tagline: 'My first C++ project: a small game engine, and Space Invaders running on it.',
+    context: 'Personal project',
+    tech: ['C++', 'OpenGL 3.3', 'GLFW', 'CMake'],
+    code: 'https://github.com/elhadjisall/SpaceInvaders',
+    live: null,
+    media: {
+      kind: 'terminal',
+      title: 'stress mode',
+      lines: ['$ ./build/spaceinvaders --stress', 'stress entities=640 batches=2 draws=2 frame_ms=4.34 hash_cells=56'],
+      caption: 'The stress-mode log from the README, measured with Mesa llvmpipe, a software renderer.',
+    },
+    caseStudy: {
+      problem: [
+        'Drawing every sprite on its own costs one draw call each, and checking every pair of objects for collisions grows with the square of their count. Both get slow fast.',
+      ],
+      built: [
+        'An engine with an OpenGL 3.3 renderer, components kept in packed arrays, a spatial hash for collisions and a sprite batcher. The game is the player, the invader swarm, bullets and the score. A separate stress scene spawns 640 moving sprites.',
+      ],
+      architecture: [
+        [{ title: 'Window and input', detail: 'GLFW, OpenGL 3.3 core' }],
+        [{ title: 'Packed component arrays', detail: 'An entity id is a slot index' }],
+        [
+          { title: 'Systems', detail: 'Walk the arrays each frame' },
+          { title: 'Spatial hash', detail: 'Test only nearby cells' },
+        ],
+        [{ title: 'Sprite batcher', detail: 'One atlas, up to 512 sprites a batch' }],
+        [{ title: 'Renderer', detail: 'One shader, one draw call per batch' }],
+      ],
+      how: [
+        'Each AABB goes into every grid cell it touches, and the narrow phase only tests that cell and its neighbours. The original pixel masks are packed into one texture atlas.',
+        'A batch closes when the texture changes or it reaches 512 sprites. The renderer uses one GLSL 330 shader, one dynamic vertex buffer and one `glDrawElements` per batch.',
+      ],
+      results: [
+        'With batch capacity 1, the stress scene logged **658** draw calls. With capacity 512 it logged **2** for 640 entities.',
+        'A frame took **4.34 ms** in stress mode, on a software renderer.',
+        'Headless tests cover the component arrays, the batcher and the spatial hash. The spatial test moves 640 boxes, checks a sample against brute force and requires fewer pair tests than checking every pair.',
+      ],
+      // TODO(elhadji): 1 or 2 real stories about a bug you hit.
+      learned: [],
+    },
   },
-  { group: 'Hardware', items: ['QTrobot', 'ROS'] },
 ];
 
-/* Navigation ------------------------------------------------------------- */
+/** Rows on the home page and on /projects. Slugs must match `projects` above. */
+export const buildingSlugs = ['quire', 'galley'];
+export const selectedSlugs = ['whodunit', 'dsm', 'wharf', 'marconi'];
+export const pastSlugs = ['whodunit', 'dsm', 'wharf', 'marconi', 'spaceinvaders', 'transcribemate', 'bifocal'];
 
-export const navigation = [
-  { id: 'about', label: 'About' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'outside', label: 'Outside' },
-  { id: 'contact', label: 'Contact' },
-];
+export const projectsBySlug = (slugs: string[]) =>
+  slugs.map((slug) => {
+    const project = projects.find((item) => item.slug === slug);
+    if (!project) throw new Error(`No project with slug "${slug}"`);
+    return project;
+  });
 
-/* Outside of code --------------------------------------------------------- */
+/* Website Mayhem --------------------------------------------------------- */
 
-export const outside = {
-  text: 'Outside of coding, I really enjoy gaming, hiking and bouldering. My most recent hike, Panorama Ridge, was my longest and most fun yet: 8 hours, 27 km and 1,621 m of elevation gain.',
+/** A third-party game: it opens in a new tab and is never embedded here. */
+export const mayhem = {
+  url: 'https://destroy.spritefusion.com/?url=https%3A%2F%2Felhadji.dev',
+  creditUrl: 'https://www.spritefusion.com/',
+};
+
+/* Beyond the code --------------------------------------------------------- */
+
+export const beyond = {
+  // TODO(elhadji): adjust this line if you like.
+  text: 'I hike, boulder and game. Panorama Ridge was the most recent one.',
+  stats: 'PANORAMA RIDGE · 27 KM · 1,621 M GAIN', // TODO(elhadji): add the date of the hike.
   photos: [
     {
-      src: '/images/hike-panorama-ridge.jpg',
+      src: hikePanorama,
       alt: 'Sitting on a rocky ledge at Panorama Ridge, looking out over a bright blue lake and snow-capped mountains.',
-      width: 1600,
-      height: 1200,
     },
     {
-      src: '/images/hike-black-tusk.jpg',
+      src: hikeBlackTusk,
       alt: 'Standing on a snowy ridge with the dark peak of Black Tusk in the distance.',
-      width: 1200,
-      height: 1500,
     },
     {
-      src: '/images/hike-meadow.jpg',
+      src: hikeMeadow,
       alt: 'Walking a wooden boardwalk through a green alpine meadow under a blue sky.',
-      width: 1200,
-      height: 1500,
     },
     {
-      src: '/images/hike-lake.jpg',
+      src: hikeLake,
       alt: 'Standing on a grassy slope above a turquoise alpine lake.',
-      width: 1200,
-      height: 1500,
     },
+  ],
+  // TODO(elhadji): an optional one-line note for each book, shown on hover.
+  books: [
+    { title: 'Red Rising', author: 'Pierce Brown', color: '#5b2f33', note: null as string | null },
+    { title: 'Frankenstein', author: 'Mary Shelley', color: '#2f4557', note: null as string | null },
+    { title: 'The Birth of Tragedy', author: 'Friedrich Nietzsche', color: '#4b4530', note: null as string | null },
   ],
 };

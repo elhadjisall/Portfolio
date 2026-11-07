@@ -1,0 +1,27 @@
+---
+import { person } from '../data/content';
+
+interface Props {
+  /** Website Mayhem lives on the home page only. */
+  showMayhem?: boolean;
+}
+
+const { showMayhem = false } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-pills js-only">
+    {
+      showMayhem && (
+        <button class="footer-pill" type="button" data-mayhem-toggle aria-expanded="false" aria-controls="mayhem">
+          $ destruction mode <kbd>D</kbd>
+        </button>
+      )
+    }
+    <button class="footer-pill" type="button" data-theme-toggle aria-pressed="false">
+      $ 8-bit theme <kbd>B</kbd>
+    </button>
+  </div>
+  <p>© {year} {person.name}</p>
+</footer>

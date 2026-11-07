@@ -1,0 +1,48 @@
+---
+import { readProfile } from '../lib/gpx';
+
+const points = readProfile('public/data/panorama.gpx');
+const width = 680;
+const height = 90;
+const maxKm = points.at(-1)?.km ?? 1;
+const elevations = points.map(({ elevation }) => elevation);
+const low = Math.min(...elevations);
+const high = Math.max(...elevations);
+const x = (km: number) => (km / maxKm) * width;
+const y = (elevation: number) => height - 4 - ((elevation - low) / (high - low || 1)) * (height - 8);
+const line = points
+  .map(({ km, elevation }, index) => `${index ? 'L' : 'M'}${x(km).toFixed(1)} ${y(elevation).toFixed(1)}`)
+  .join(' ');
+const data = JSON.stringify(points.map(({ km, elevation }) => [+x(km).toFixed(1), +y(elevation).toFixed(1), +km.toFixed(1), Math.round(elevation)]));
+---
+
+{
+  points.length > 0 && (
+    <figure class="profile-chart" data-profile={data}>
+      <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" role="img" aria-label="Elevation profile of the hike">
+        <path d={line} />
+        <circle r="3" cx="0" cy={y(points[0].elevation)} style="display: none" />
+      </svg>
+      <figcaption class="profile-readout mono" data-profile-readout></figcaption>
+    </figure>
+  )
+}
+
+<script>
+  const chart = document.querySelector<HTMLElement>('[data-profile]');
+  if (chart) {
+    const points = JSON.parse(chart.dataset.profile ?? '[]') as number[][];
+    const svg = chart.querySelector('svg');
+    const dot = chart.querySelector('circle');
+    const readout = chart.querySelector('[data-profile-readout]');
+    svg?.addEventListener('pointermove', (event) => {
+      const box = svg.getBoundingClientRect();
+      const target = ((event.clientX - box.left) / box.width) * 680;
+      const point = points.reduce((best, item) => (Math.abs(item[0] - target) < Math.abs(best[0] - target) ? item : best));
+      dot?.removeAttribute('style');
+      dot?.setAttribute('cx', String(point[0]));
+      dot?.setAttribute('cy', String(point[1]));
+      if (readout) readout.textContent = `${point[2]} km · ${point[3]} m`;
+    });
+  }
+</script>

@@ -1,14 +1,23 @@
 ---
-import ProjectCard from '../../components/ProjectCard.astro';
-import { person, projects } from '../../data/content';
+import ProjectRow from '../../components/ProjectRow.astro';
+import { buildingSlugs, pastSlugs, person, projectsBySlug } from '../../data/content';
 import Base from '../../layouts/Base.astro';
 ---
 
-<Base title={`Projects | ${person.name}`} description="Systems, backend and AI projects, each with a write-up and source code.">
-  <section class="section" data-section="projects">
-    <h1>Projects</h1>
-    <div class="cards">
-      {projects.map((project) => <ProjectCard project={project} />)}
+<Base title={`Projects | ${person.name}`} description="Systems, backend and AI projects, each with a write-up and source code." scene="orbit">
+  <section class="block" data-section="projects">
+    <h1 class="marker">All projects</h1>
+
+    <h2 class="group-label mono">Currently building</h2>
+    <div class="rows rows-grid">
+      {projectsBySlug(buildingSlugs).map((project) => <ProjectRow project={project} building expandable />)}
+    </div>
+
+    <h2 class="group-label mono">Past</h2>
+    <div class="rows rows-grid">
+      {projectsBySlug(pastSlugs).map((project) => <ProjectRow project={project} expandable />)}
     </div>
   </section>
+
+  <pre class="orbit-log" slot="overlay" data-orbit-log aria-hidden="true"></pre>
 </Base>

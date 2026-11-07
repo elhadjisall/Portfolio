@@ -1,34 +1,35 @@
 ---
-import { navigation, person } from '../data/content';
+import { person } from '../data/content';
 import { umamiEvent } from '../lib/format';
-import Icon from './Icon.astro';
 
-const current = Astro.url.pathname;
+const path = Astro.url.pathname;
+const isHome = path === '/';
 ---
 
 <header class="nav">
-  <div class="nav-inner">
-    <a class="nav-mark" href="/">{person.name}</a>
-    <nav aria-label="Sections">
-      <ul data-nav-scroller>
-        {
-          navigation.map(({ id, label }) => (
-            <li>
-              <a
-                href={`/${id}/`}
-                data-nav-link={id}
-                aria-current={current.startsWith(`/${id}`) ? 'page' : undefined}
-                {...umamiEvent('nav_click', { section: id })}
-              >
-                {label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
-      <Icon name="theme" />
-    </button>
-  </div>
+  {!isHome && <a class="nav-home" href="/">{person.name}</a>}
+  <nav aria-label="Main">
+    <ul>
+      <li>
+        <a href="/" aria-current={isHome ? 'page' : undefined} {...umamiEvent('nav_click', { section: 'home' })}>Home</a>
+      </li>
+      <li>
+        <a
+          href="/projects/"
+          aria-current={path.startsWith('/projects') ? 'page' : undefined}
+          {...umamiEvent('nav_click', { section: 'projects' })}>Projects</a
+        >
+      </li>
+      <li>
+        <a
+          href="/profile/"
+          aria-current={path.startsWith('/profile') ? 'page' : undefined}
+          {...umamiEvent('nav_click', { section: 'profile' })}>Profile</a
+        >
+      </li>
+      <li>
+        <a href={person.resume} target="_blank" rel="noopener" {...umamiEvent('resume_download')}>Resume</a>
+      </li>
+    </ul>
+  </nav>
 </header>
