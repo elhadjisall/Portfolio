@@ -14,9 +14,6 @@ import { inline, umamiEvent } from '../lib/format';
       <span class="sr-only">{person.roles.join(', ')}</span>
       <span aria-hidden="true"><span data-typed={JSON.stringify(person.roles)}>{person.roles[0]}</span><span class="cursor"></span></span>
     </p>
-    <div class="profile-text">
-      {person.about.map((paragraph) => <p>{paragraph}</p>)}
-    </div>
   </section>
 
   <section id="experience" class="block" data-section="experience" aria-labelledby="experience-title">
