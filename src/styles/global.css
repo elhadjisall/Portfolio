@@ -363,14 +363,6 @@ li code {
   white-space: nowrap;
 }
 
-.profile-text {
-  margin-top: 24px;
-}
-
-.profile-text p + p {
-  margin-top: 14px;
-}
-
 .block {
   padding-top: 52px;
 }
