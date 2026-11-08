@@ -78,10 +78,6 @@ export const person = {
   roles: ['Backend engineer', 'Hiking enthusiast', 'Reader', 'Love to build things'],
   description:
     "Computer Science student at UNBC. I work mostly on backend and systems code in C++, Python and Go.",
-  about: [
-    "I'm a Computer Science student at UNBC, with a minor in Math. I work mostly on backend and systems code in C++, Python and Go. At Microsoft, I work on Call of Duty's login and authentication services, from the C++ game client to the Python services behind it, running on Kubernetes and Docker. Before that, I built a real-time pose-tracking pipeline for a robot at the UNBC Robotics Lab.",
-    'I like knowing how things work underneath, so I build my own versions of them: a Linux container runtime, a Redis clone in Go, and a C++ tool that reorders large dependency graphs. I care a lot about what happens when things break, so I write retries and fallbacks, plus tests that take a service down on purpose to make sure they work.',
-  ],
   email: 'elhadjisall2005@gmail.com',
   github: 'https://github.com/elhadjisall',
   githubName: 'elhadjisall',
