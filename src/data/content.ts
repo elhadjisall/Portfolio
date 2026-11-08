@@ -369,7 +369,7 @@ export const projects: Project[] = [
     category: 'SYSTEMS',
     blurb: 'An in-memory data server in Go that speaks the Redis protocol.',
     details: 'Strings, hashes, lists and sets, with TTL expiry on a heap. An append-only file replays on restart, and a PSYNC handshake syncs a read-only replica.',
-    metric: { value: 'AOF + PSYNC', label: 'REDIS PROTOCOL · 4 DATA TYPES' },
+    metric: { value: '24 tests', label: 'RESP · AOF REPLAY · PSYNC REPLICA' },
     title: 'Marconi',
     tagline:
       'Redis from scratch: an in-memory data server in Go with RESP, TTL expiry, an append-only file and PSYNC replication.',
@@ -438,7 +438,7 @@ export const projects: Project[] = [
     category: 'ML SYSTEMS',
     blurb: 'A small GPT-style model built from scratch in PyTorch.',
     details: 'A byte-level BPE tokenizer, causal attention, a training loop with a cosine schedule, and LoRA and instruction fine-tuning code. A browser workbench shows tokens, attention and loss.',
-    // TODO(elhadji): a real metric, as metric: { value: '...', label: '...' }.
+    metric: { value: '29 tests', label: 'BPE TOKENIZER TO LORA, FROM SCRATCH' },
     // TODO(elhadji): what comes next, for example training on a real corpus.
     next: null,
     title: 'Galley',
@@ -497,6 +497,7 @@ export const projects: Project[] = [
     category: 'ML SYSTEMS',
     blurb: 'Speech-to-text in the browser, backed by a local Whisper service that streams partial text.',
     details: 'The browser sends PCM to a local PyTorch service. Audio is split into 30-second windows with 5 seconds of overlap, and text comes back as each window finishes.',
+    metric: { value: '28 tests', label: 'LOCAL WHISPER · STREAMED PARTIAL TEXT' },
     title: 'TranscribeMate',
     tagline:
       'Speech-to-text in the browser, backed by a local PyTorch Whisper service that streams partial transcripts as it works.',
