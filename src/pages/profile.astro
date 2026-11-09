@@ -5,7 +5,7 @@ import { beyond, person } from '../data/content';
 import Base from '../layouts/Base.astro';
 ---
 
-<Base title={`Profile | ${person.name}`} description={beyond.text} scene="constellations">
+<Base title={`Profile | ${person.name}`} description={`Hikes and the books ${person.name} is reading.`} scene="constellations">
   <section class="block" data-section="profile">
     <h1 class="marker">Beyond the code</h1>
     <p class="ascent-label mono">Last ascent</p>
@@ -29,7 +29,6 @@ import Base from '../layouts/Base.astro';
     </div>
     <p class="ascent-stats mono">{beyond.stats}</p>
     <ElevationProfile />
-    <p class="ascent-text">{beyond.text}</p>
 
     <p class="shelf-label mono">Currently reading</p>
     <ul class="shelf">

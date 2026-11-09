@@ -67,7 +67,7 @@ import { inline, umamiEvent } from '../lib/format';
   <section id="contact" class="block" data-section="contact" aria-labelledby="contact-title">
     <h2 id="contact-title" class="marker">Contact</h2>
     <ul class="contact-list">
-      <li class="sub"><ContactIcon name="email" /><span>Email:</span> <a href={`mailto:${person.email}`} {...umamiEvent('social_click', { platform: 'email' })}>{person.email}</a></li>
+      <li class="sub"><a class="icon-link" href={`mailto:${person.email}`} aria-label="Email me" title="Email me" {...umamiEvent('social_click', { platform: 'email' })}><ContactIcon name="email" /></a></li>
       <li class="sub"><ContactIcon name="github" /><span>GitHub:</span> <a href={person.github} {...umamiEvent('social_click', { platform: 'github' })}>{person.githubName}</a></li>
       <li class="sub"><ContactIcon name="linkedin" /><span>LinkedIn:</span> <a href={person.linkedin} {...umamiEvent('social_click', { platform: 'linkedin' })}>{person.linkedinName}</a></li>
     </ul>

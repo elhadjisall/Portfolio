@@ -842,10 +842,6 @@ li code {
   color: var(--accent);
 }
 
-.ascent-text {
-  margin-top: 10px;
-}
-
 .profile-chart {
   position: relative;
   margin-top: 12px;
@@ -974,6 +970,17 @@ li code {
 
 .contact-list a {
   overflow-wrap: anywhere;
+}
+
+.contact-list .icon-link {
+  display: inline-flex;
+  padding: 4px;
+  margin: -4px;
+}
+
+.contact-list .icon-link:hover .contact-icon,
+.contact-list .icon-link:focus-visible .contact-icon {
+  color: var(--accent);
 }
 
 /* Footer ------------------------------------------------------------------- */

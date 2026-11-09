@@ -740,8 +740,6 @@ export const mayhem = {
 /* Beyond the code --------------------------------------------------------- */
 
 export const beyond = {
-  // TODO(elhadji): adjust this line if you like.
-  text: 'I hike, boulder and game. Panorama Ridge was the most recent one.',
   stats: 'PANORAMA RIDGE · 27 KM · 1,621 M GAIN', // TODO(elhadji): add the date of the hike.
   photos: [
     {
