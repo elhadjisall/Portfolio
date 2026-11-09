@@ -544,6 +544,7 @@ export const projects: Project[] = [
     category: 'ML · TEAM, HACKAI',
     blurb: 'Flags abusive and manipulative messages with a multi-task classifier, then suggests next steps.',
     details: 'A MiniLM encoder feeds four task heads, with 74% held-out accuracy across 9 incident types. Hybrid RAG with Gemini writes the guidance, served through Flask to a React app.',
+    metric: { value: '95.9%', label: 'CONCERNING VS SAFE · 5-FOLD CV' },
     title: 'Bifocal',
     tagline:
       'Flags abusive and manipulative messages with a multi-task classifier, and offers guidance through hybrid RAG with Gemini.',
@@ -607,7 +608,7 @@ export const projects: Project[] = [
     blurb: 'A SQL database in Go, built on a B+tree of 4 KB copy-on-write pages.',
     details:
       'Tables, secondary indexes, transactions and EXPLAIN. For each query the planner picks a primary-key lookup, an index scan or a full table scan.',
-    // TODO(elhadji): a real metric, as metric: { value: '...', label: '...' }.
+    metric: { value: '6.4K lines of Go', label: 'SQL PARSER · PLANNER · B+TREE · PAGER' },
     // TODO(elhadji): what comes next, for example JOIN or GROUP BY.
     next: null,
     tagline: 'A page-oriented SQL database in Go, from the pager up to the query planner.',
@@ -672,6 +673,7 @@ export const projects: Project[] = [
     blurb: 'My first C++ project: Space Invaders on a small engine with OpenGL 3.3 rendering, packed component arrays and a spatial hash.',
     details:
       'A sprite batcher draws 640 moving sprites in 2 draw calls, against 658 with batching turned off. Collisions go through a spatial hash, checked against brute force in a headless test.',
+    metric: { value: '658 → 2', label: 'DRAW CALLS · 640 SPRITES' },
     tagline: 'My first C++ project: a small game engine, and Space Invaders running on it.',
     context: 'Personal project',
     tech: ['C++', 'OpenGL 3.3', 'GLFW', 'CMake'],
