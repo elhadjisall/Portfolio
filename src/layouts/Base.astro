@@ -59,29 +59,11 @@ const jsonLd = JSON.stringify(personSchema).replace(/</g, '\\u003c');
     }
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Loads Umami only on the live site, once its ID is set. -->
-    <script is:inline define:vars={{ umamiId, umamiSrc }}>
-      (function () {
-        var host = location.hostname;
-        var isLocal =
-          location.protocol === 'file:' ||
-          host === 'localhost' ||
-          host === '127.0.0.1' ||
-          host === '[::1]' ||
-          host === '0.0.0.0' ||
-          host.endsWith('.local');
-        if (isLocal) return;
-
-        if (umamiId) {
-          var umami = document.createElement('script');
-          umami.id = 'umami-script';
-          umami.defer = true;
-          umami.src = umamiSrc;
-          umami.dataset.websiteId = umamiId;
-          document.head.appendChild(umami);
-        }
-      })();
-    </script>
+    {
+      umamiId && import.meta.env.PROD && (
+        <script is:inline id="umami-script" defer src={umamiSrc} data-website-id={umamiId} data-domains="elhadji.dev"></script>
+      )
+    }
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={person.name} />
