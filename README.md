@@ -27,7 +27,6 @@ Almost everything is in one file: [`src/data/content.ts`](src/data/content.ts). 
 | --- | --- |
 | Add a hike profile | Save a GPX file at `public/data/panorama.gpx`; the elevation line appears by itself |
 | Add a Live link | Set the project's `live` to a URL |
-| Update the resume | Replace `public/resume.pdf` |
 | Replace the social card | Replace `public/og.png` (1200 × 630) |
 | Add a project image | Save it in `src/assets/projects/`, import it in `content.ts`, and use it as `media` |
 
@@ -91,7 +90,6 @@ All events go through `track()` in [`src/scripts/analytics.ts`](src/scripts/anal
 
 | Event | Properties | Fires when |
 | --- | --- | --- |
-| `resume_download` | none | Resume button is clicked |
 | `social_click` | `platform`: github, linkedin or email | A GitHub, LinkedIn or email button is clicked |
 | `project_click` | `project`, `link_type`: live, code, case_study, report or slides | A project link is clicked |
 | `experience_click` | `company` | An employer link is clicked |

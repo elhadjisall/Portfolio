@@ -83,7 +83,6 @@ export const person = {
   githubName: 'elhadjisall',
   linkedin: 'https://linkedin.com/in/elhadjisall',
   linkedinName: 'elhadjisall',
-  resume: '/resume.pdf',
   jobTitle: 'Software Engineer Intern',
   employer: 'Microsoft',
   school: 'University of Northern British Columbia',
